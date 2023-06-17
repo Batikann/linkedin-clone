@@ -8,6 +8,7 @@ export default {
         'outline-color': '#0073B1',
         'light-blue': '#0A66C2',
         'dark-blue': '#004182',
+        'register-page': '#F3F2F0',
       },
       boxShadow: {
         custom: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',
