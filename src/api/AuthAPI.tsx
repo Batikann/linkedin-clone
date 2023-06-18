@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from 'firebase/auth'
 import { toast } from 'react-toastify'
 
@@ -25,7 +26,7 @@ export const LoginAPI = async (email: string, password: string) => {
 export const RegisterAPI = async (email: string, password: string) => {
   let state = false
   await createUserWithEmailAndPassword(auth, email, password)
-    .then((result) => {
+    .then(() => {
       toast.success('Kayıt işlemi başarılı')
       state = true
     })
@@ -49,6 +50,19 @@ export const GoogleSignInAPI = async () => {
     })
     .catch((error) => {
       toast.error(error.message)
+    })
+  return state
+}
+
+export const logout = async () => {
+  let state = false
+  await signOut(auth)
+    .then(() => {
+      toast.success('Çıkış işlemi Başarılı...')
+      state = true
+    })
+    .catch((err) => {
+      toast.error(err.message)
     })
   return state
 }

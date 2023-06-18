@@ -3,7 +3,7 @@ import HomeComponent from '../components/Home/HomeComponent'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../firebase/config'
 import { useNavigate } from 'react-router-dom'
-import Loader from '../components/common/Loader'
+import Loader from '../components/common/Loader/Loader'
 
 const Home = () => {
   const navigate = useNavigate()

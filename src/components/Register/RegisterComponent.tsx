@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom'
 import { User } from '../type'
-import { RegisterAPI } from '../../api/AuthAPI'
+import { GoogleSignInAPI, RegisterAPI } from '../../api/AuthAPI'
 
 const RegisterComponent = () => {
   const navigate = useNavigate()
@@ -12,6 +12,11 @@ const RegisterComponent = () => {
     email: '',
     password: '',
   })
+
+  const loginWithGoogle = async () => {
+    let res = await GoogleSignInAPI()
+    res ? navigate('/') : ''
+  }
 
   const registerHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -75,7 +80,10 @@ const RegisterComponent = () => {
             </div>
           </form>
           <div className="flex justify-center">
-            <button className="border-2 font-medium text-sm border-gray-400 gap-2 w-[345px] hover:border-gray-800 flex items-center justify-center h-[44px] rounded-full">
+            <button
+              onClick={loginWithGoogle}
+              className="border-2 font-medium text-sm border-gray-400 gap-2 w-[345px] hover:border-gray-800 flex items-center justify-center h-[44px] rounded-full"
+            >
               <FcGoogle size={20} /> Google ile devam edin
             </button>
           </div>
