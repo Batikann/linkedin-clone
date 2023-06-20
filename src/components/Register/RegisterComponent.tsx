@@ -39,57 +39,67 @@ const RegisterComponent = () => {
               res ? navigate('/') : ''
             }}
           >
-            <Form className="flex flex-col gap-6 items-start">
-              <div className="flex flex-col gap-1 w-full">
-                <label className="text-sm font-medium">E-posta</label>
-                <Field
-                  type="text"
-                  name="email"
-                  className="h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer "
-                />
-                <ErrorMessage
-                  name="email"
-                  component="p"
-                  className="text-red-600 text-sm"
-                />
-              </div>
-              <div className="w-full ">
-                <label className="text-sm font-medium">
-                  Şifre (6+karakter)
-                </label>
-                <div className="mt-2 relative">
+            {({ errors, touched }) => (
+              <Form className="flex flex-col gap-6 items-start">
+                <div className="flex flex-col gap-1 w-full">
+                  <label className="text-sm font-medium">E-posta</label>
                   <Field
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    className="h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer mb-1"
+                    type="text"
+                    name="email"
+                    className={
+                      errors.email
+                        ? 'h-[32px] w-full border border-red-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
+                        : 'h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
+                    }
                   />
-                  <button
-                    onClick={() => setShowPassword(!showPassword)}
-                    type="button"
-                    className="absolute top-1 right-3 text-base font-medium text-light-blue "
-                  >
-                    {showPassword ? 'Gizle' : 'Göster'}
-                  </button>
                   <ErrorMessage
-                    className="text-red-600 text-sm"
-                    name="password"
+                    name="email"
                     component="p"
+                    className="text-red-600 text-sm"
                   />
                 </div>
-              </div>
-              <button
-                type="submit"
-                className="h-12 w-full rounded-full mb-3 text-white font-semibold bg-light-blue hover:bg-dark-blue"
-              >
-                Kabul Et ve Katıl
-              </button>
-              <div className="inline-flex items-center justify-center w-full">
-                <hr className="w-64 h-px my-2 bg-gray-300 border-0 " />
-                <span className="absolute px-3 text-base text-gray-500 -translate-x-1/2 bg-white left-1/2 ">
-                  veya
-                </span>
-              </div>
-            </Form>
+                <div className="w-full ">
+                  <label className="text-sm font-medium">
+                    Şifre (6+karakter)
+                  </label>
+                  <div className="mt-2 relative">
+                    <Field
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      className={
+                        errors.password
+                          ? 'h-[32px] w-full border border-red-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
+                          : 'h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
+                      }
+                    />
+                    <button
+                      onClick={() => setShowPassword(!showPassword)}
+                      type="button"
+                      className="absolute top-1 right-3 text-base font-medium text-light-blue "
+                    >
+                      {showPassword ? 'Gizle' : 'Göster'}
+                    </button>
+                    <ErrorMessage
+                      className="text-red-600 text-sm"
+                      name="password"
+                      component="p"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="h-12 w-full rounded-full mb-3 text-white font-semibold bg-light-blue hover:bg-dark-blue"
+                >
+                  Kabul Et ve Katıl
+                </button>
+                <div className="inline-flex items-center justify-center w-full">
+                  <hr className="w-64 h-px my-2 bg-gray-300 border-0 " />
+                  <span className="absolute px-3 text-base text-gray-500 -translate-x-1/2 bg-white left-1/2 ">
+                    veya
+                  </span>
+                </div>
+              </Form>
+            )}
           </Formik>
           <div className="flex justify-center">
             <button
