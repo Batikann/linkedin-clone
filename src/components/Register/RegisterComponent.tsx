@@ -2,25 +2,22 @@ import logo from '../../assets/logo.svg'
 import { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom'
-import { User } from '../type'
 import { GoogleSignInAPI, RegisterAPI } from '../../api/AuthAPI'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { registerValidationSchema } from '../../schema/validationSchema'
+import { User } from '../type'
 
 const RegisterComponent = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [credentials, setCredentials] = useState<User>({
+
+  const initialValues: User = {
     email: '',
     password: '',
-  })
+  }
 
   const loginWithGoogle = async () => {
     let res = await GoogleSignInAPI()
-    res ? navigate('/') : ''
-  }
-
-  const registerHandle = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    let res = await RegisterAPI(credentials.email, credentials.password)
     res ? navigate('/') : ''
   }
 
@@ -34,51 +31,66 @@ const RegisterComponent = () => {
       </div>
       <div className="flex flex-col gap-4 justify-center  md:mt-0">
         <div className=" md:px-8 md:py-6 flex flex-col gap-6 md:bg-white w-[400px] md:shadow-custom rounded-md  ">
-          <form
-            onSubmit={registerHandle}
-            className="flex flex-col gap-2 items-start"
+          <Formik
+            initialValues={initialValues}
+            validationSchema={registerValidationSchema}
+            onSubmit={async (values) => {
+              let res = await RegisterAPI(values.email, values.password)
+              res ? navigate('/') : ''
+            }}
           >
-            <div className="flex flex-col gap-2 w-full">
-              <label className="text-sm font-medium">E-posta</label>
-              <input
-                type="text"
-                className="h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer mb-3"
-                value={credentials.email}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, email: e.target.value })
-                }
-              />
-            </div>
-            <div className="w-full ">
-              <label className="text-sm font-medium">Şifre (6+karakter)</label>
-              <div className="mt-2 relative">
-                <input
-                  value={credentials.password}
-                  type={showPassword ? 'text' : 'password'}
-                  className="h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer mb-3"
-                  onChange={(e) =>
-                    setCredentials({ ...credentials, password: e.target.value })
-                  }
+            <Form className="flex flex-col gap-6 items-start">
+              <div className="flex flex-col gap-1 w-full">
+                <label className="text-sm font-medium">E-posta</label>
+                <Field
+                  type="text"
+                  name="email"
+                  className="h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer "
                 />
-                <button
-                  onClick={() => setShowPassword(!showPassword)}
-                  type="button"
-                  className="absolute top-1 right-3 text-base font-medium text-light-blue "
-                >
-                  {showPassword ? 'Gizle' : 'Göster'}
-                </button>
+                <ErrorMessage
+                  name="email"
+                  component="p"
+                  className="text-red-600 text-sm"
+                />
               </div>
-            </div>
-            <button className="h-12 w-full rounded-full mb-3 text-white font-semibold bg-light-blue hover:bg-dark-blue">
-              Kabul Et ve Katıl
-            </button>
-            <div className="inline-flex items-center justify-center w-full">
-              <hr className="w-64 h-px my-2 bg-gray-300 border-0 " />
-              <span className="absolute px-3 text-base text-gray-500 -translate-x-1/2 bg-white left-1/2 ">
-                veya
-              </span>
-            </div>
-          </form>
+              <div className="w-full ">
+                <label className="text-sm font-medium">
+                  Şifre (6+karakter)
+                </label>
+                <div className="mt-2 relative">
+                  <Field
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    className="h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer mb-1"
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    type="button"
+                    className="absolute top-1 right-3 text-base font-medium text-light-blue "
+                  >
+                    {showPassword ? 'Gizle' : 'Göster'}
+                  </button>
+                  <ErrorMessage
+                    className="text-red-600 text-sm"
+                    name="password"
+                    component="p"
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="h-12 w-full rounded-full mb-3 text-white font-semibold bg-light-blue hover:bg-dark-blue"
+              >
+                Kabul Et ve Katıl
+              </button>
+              <div className="inline-flex items-center justify-center w-full">
+                <hr className="w-64 h-px my-2 bg-gray-300 border-0 " />
+                <span className="absolute px-3 text-base text-gray-500 -translate-x-1/2 bg-white left-1/2 ">
+                  veya
+                </span>
+              </div>
+            </Form>
+          </Formik>
           <div className="flex justify-center">
             <button
               onClick={loginWithGoogle}
