@@ -6,6 +6,7 @@ import { GoogleSignInAPI, RegisterAPI } from '../../api/AuthAPI'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { registerValidationSchema } from '../../schema/validationSchema'
 import { User } from '../type'
+import classNames from 'classnames'
 
 const RegisterComponent = () => {
   const navigate = useNavigate()
@@ -39,18 +40,19 @@ const RegisterComponent = () => {
               res ? navigate('/') : ''
             }}
           >
-            {({ errors, touched }) => (
-              <Form className="flex flex-col gap-6 items-start">
+            {({ errors }) => (
+              <Form className="flex flex-col gap-4 items-start">
                 <div className="flex flex-col gap-1 w-full">
-                  <label className="text-sm font-medium">E-posta</label>
+                  <label className="text-sm font-medium mb-1">E-posta</label>
                   <Field
                     type="text"
                     name="email"
-                    className={
-                      errors.email
-                        ? 'h-[32px] w-full border border-red-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
-                        : 'h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
-                    }
+                    className={classNames({
+                      'h-[32px] w-full border  rounded-md px-4  hover:bg-register-page cursor-pointer ':
+                        true,
+                      'border-red-600 focus:outline-red-600': errors.email,
+                      'border-gray-700 focus:outline-gray-700': !errors.email,
+                    })}
                   />
                   <ErrorMessage
                     name="email"
@@ -62,15 +64,17 @@ const RegisterComponent = () => {
                   <label className="text-sm font-medium">
                     Şifre (6+karakter)
                   </label>
-                  <div className="mt-2 relative">
+                  <div className=" relative mt-1">
                     <Field
                       name="password"
                       type={showPassword ? 'text' : 'password'}
-                      className={
-                        errors.password
-                          ? 'h-[32px] w-full border border-red-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
-                          : 'h-[32px] w-full border border-gray-600 rounded-md px-4 focus:outline-gray-700 hover:bg-register-page cursor-pointer'
-                      }
+                      className={classNames({
+                        'h-[32px] w-full border  rounded-md px-4  hover:bg-register-page cursor-pointer ':
+                          true,
+                        'border-red-600 focus:outline-red-600': errors.password,
+                        'border-gray-700 focus:outline-gray-700':
+                          !errors.password,
+                      })}
                     />
                     <button
                       onClick={() => setShowPassword(!showPassword)}
@@ -80,7 +84,7 @@ const RegisterComponent = () => {
                       {showPassword ? 'Gizle' : 'Göster'}
                     </button>
                     <ErrorMessage
-                      className="text-red-600 text-sm"
+                      className="text-red-600 text-sm mt-2"
                       name="password"
                       component="p"
                     />

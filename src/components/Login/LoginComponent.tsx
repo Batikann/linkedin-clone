@@ -1,24 +1,22 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { User } from '../type'
 import { GoogleSignInAPI, LoginAPI } from '../../api/AuthAPI'
 import { FcGoogle } from 'react-icons/fc'
 import { DiApple } from 'react-icons/di'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo.svg'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { loginValidationSchema } from '../../schema/loginValidationSchema'
+import classNames from 'classnames'
 
 const LoginComponent = () => {
   const navigate = useNavigate()
-  const [credentials, setCredentials] = useState<User>({
+
+  const initialValues: User = {
     email: '',
     password: '',
-  })
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-
-  const loginHandle = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const res = await LoginAPI(credentials.email, credentials.password)
-    res ? navigate('/home') : ''
   }
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const loginWithGoogle = async () => {
     const res = await GoogleSignInAPI()
@@ -36,50 +34,75 @@ const LoginComponent = () => {
               Profesyonel dünyanızla ilgili güncel haberlere sahip olun
             </p>
           </div>
-          <form
-            onSubmit={loginHandle}
-            className="flex flex-col gap-3 items-start"
+          <Formik
+            initialValues={initialValues}
+            validationSchema={loginValidationSchema}
+            onSubmit={async (values) => {
+              const res = await LoginAPI(values.email, values.password)
+              res ? navigate('/home') : ''
+            }}
           >
-            <input
-              type="text"
-              placeholder="E-posta veya Telefon"
-              className="h-[52px] w-full border border-gray-600 rounded-md px-4 focus:outline-outline-color mb-3"
-              value={credentials.email}
-              onChange={(e) =>
-                setCredentials({ ...credentials, email: e.target.value })
-              }
-            />
-            <div className="w-full relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Şifre"
-                className="h-[52px] w-full border border-gray-600 rounded-md px-4 focus:outline-outline-color"
-                value={credentials.password}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, password: e.target.value })
-                }
-              />
-              <button
-                onClick={() => setShowPassword(!showPassword)}
-                type="button"
-                className="absolute top-1/2 right-1 -translate-y-1/2 text-sm text-light-blue font-medium hover:bg-blue-100 p-1 px-2 rounded-full"
-              >
-                {showPassword ? 'gizle' : 'göster'}
-              </button>
-            </div>
-            <p className="text-light-blue font-semibold text-base hover:bg-blue-100 p-1 rounded-full hover:underline hover:underline-offset-2 cursor-pointer">
-              Şifrenizi mi unuttunuz?
-            </p>
-            <button className="h-[52px] bg-light-blue hover:bg-dark-blue w-full rounded-full text-white font-semibold">
-              Oturum açın
-            </button>
-            <div className="inline-flex items-center justify-center w-full">
-              <hr className="w-64 h-px my-2 bg-gray-300 border-0 " />
-              <span className="absolute px-3 text-sm text-gray-500 -translate-x-1/2 bg-white left-1/2 ">
-                veya
-              </span>
-            </div>
-          </form>
+            {({ errors }) => (
+              <Form className="flex flex-col gap-3 items-start">
+                <div className="w-full">
+                  <Field
+                    type="text"
+                    placeholder="E-posta veya Telefon"
+                    className={classNames({
+                      'h-[52px] w-full border  rounded-md px-4  hover:bg-register-page cursor-pointer mb-3':
+                        true,
+                      'border-red-600 focus:outline-red-600': errors.email,
+                      'border-gray-700 focus:outline-gray-700': !errors.email,
+                    })}
+                    name="email"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="p"
+                    className="text-red-600 text-sm font-medium"
+                  />
+                </div>
+                <div className="w-full relative mt-3">
+                  <Field
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Şifre"
+                    name="password"
+                    className={classNames({
+                      'h-[52px] w-full border  rounded-md px-4  hover:bg-register-page cursor-pointer ':
+                        true,
+                      'border-red-600 focus:outline-red-600': errors.password,
+                      'border-gray-700 focus:outline-gray-700':
+                        !errors.password,
+                    })}
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    type="button"
+                    className="absolute top-1/2 right-1 -translate-y-1/2 text-sm text-light-blue font-medium hover:bg-blue-100 p-1 px-2 rounded-full "
+                  >
+                    {showPassword ? 'gizle' : 'göster'}
+                  </button>
+                </div>
+                <ErrorMessage
+                  name="password"
+                  component="p"
+                  className="text-red-600 text-sm font-medium"
+                />
+                <p className="text-light-blue font-semibold text-base hover:bg-blue-100 p-1 rounded-full hover:underline hover:underline-offset-2 cursor-pointer">
+                  Şifrenizi mi unuttunuz?
+                </p>
+                <button className="h-[52px] bg-light-blue hover:bg-dark-blue w-full rounded-full text-white font-semibold">
+                  Oturum açın
+                </button>
+                <div className="inline-flex items-center justify-center w-full">
+                  <hr className="w-64 h-px my-2 bg-gray-300 border-0 " />
+                  <span className="absolute px-3 text-sm text-gray-500 -translate-x-1/2 bg-white left-1/2 ">
+                    veya
+                  </span>
+                </div>
+              </Form>
+            )}
+          </Formik>
           <div className="flex flex-col gap-4 ">
             <button
               onClick={loginWithGoogle}
