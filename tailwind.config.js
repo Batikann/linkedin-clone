@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  important: true,
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -9,6 +10,7 @@ export default {
         'light-blue': '#0A66C2',
         'dark-blue': '#004182',
         'register-page': '#F3F2F0',
+        'post-color': '#A9A9A9',
       },
       boxShadow: {
         custom: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',

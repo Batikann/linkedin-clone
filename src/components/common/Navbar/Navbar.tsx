@@ -9,9 +9,14 @@ import {
 import { IoMdHome, IoMdSearch, IoMdClose } from 'react-icons/io'
 import { BiUserCircle } from 'react-icons/bi'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState<boolean>(true)
+  const navigate = useNavigate()
+  const goToRoute = (route: string) => {
+    navigate(route)
+  }
   return (
     <div className="md:h-[53px] h-[73px]   w-full md:justify-center justify-between lg:gap-20 md:gap-8 gap-4 items-center flex p-6 ">
       <div className="flex items-center md:h-[53px] h-[73px] gap-4 justify-center ">
@@ -19,7 +24,7 @@ const Navbar = () => {
         <div
           className={
             searchBar
-              ? 'hidden md:block md:w-[384px]'
+              ? 'hidden md:block md:w-[384px] relative'
               : 'relative md:w-[384px] z-50 w-full '
           }
         >
@@ -48,7 +53,10 @@ const Navbar = () => {
           >
             <IoMdSearch size={24} className="text-gray-500" />
           </li>
-          <li className="text-gray-500 flex flex-col justify-center items-center  hover:text-black  cursor-pointer">
+          <li
+            className="text-gray-500 flex flex-col justify-center items-center  hover:text-black  cursor-pointer"
+            onClick={() => goToRoute('/home')}
+          >
             <IoMdHome size={22} />
             <p className="text-xs hidden lg:block">Ana Sayfa</p>
           </li>
@@ -68,7 +76,10 @@ const Navbar = () => {
             <BsFillBellFill size={22} />
             <p className="text-xs hidden lg:block">Bildirimler</p>
           </li>
-          <li className="text-gray-500 flex flex-col justify-center items-center    hover:text-black  cursor-pointer">
+          <li
+            className="text-gray-500 flex flex-col justify-center items-center    hover:text-black  cursor-pointer"
+            onClick={() => goToRoute('/profile')}
+          >
             <BiUserCircle size={22} />
             <p className="text-xs hidden lg:block">Ben</p>
           </li>

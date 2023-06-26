@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../../api/AuthAPI'
-
+import PostStatus from '../common/PostUpdate'
 const HomeComponent = () => {
   const navigate = useNavigate()
   const logoutHandle = async () => {
@@ -9,11 +9,10 @@ const HomeComponent = () => {
   }
 
   return (
-    <div className="flex justify-between p-4 min-h-screen bg-register-page">
-      <h1>HomeComponent</h1>
-      <button onClick={logoutHandle} className="text-xl font-medium text-black">
-        Logout
-      </button>
+    <div className="flex justify-between md:p-4 min-h-screen bg-register-page">
+      <div className="max-w-7xl mx-auto">
+        <PostStatus />
+      </div>
     </div>
   )
 }
