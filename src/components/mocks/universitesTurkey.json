@@ -1,0 +1,326 @@
+[
+  {
+    "name": "Adnan Menderes Üniversitesi"
+  },
+  {
+    "name": "Ahi Evran Üniversitesi"
+  },
+  {
+    "name": "Akdeniz Üniversitesi"
+  },
+  {
+    "name": "Amasya Üniversitesi"
+  },
+  {
+    "name": "Anadolu Üniversitesi"
+  },
+  {
+    "name": "Ankara Sosyal Bilimler Üniversitesi"
+  },
+  {
+    "name": "Ankara Üniversitesi"
+  },
+  {
+    "name": "Ardahan Üniversitesi"
+  },
+  {
+    "name": "Artvin Çoruh Üniversitesi"
+  },
+  {
+    "name": "Atatürk Üniversitesi"
+  },
+  {
+    "name": "Balıkesir Üniversitesi"
+  },
+  {
+    "name": "Bartın Üniversitesi"
+  },
+  {
+    "name": "Batman Üniversitesi"
+  },
+  {
+    "name": "Bayburt Üniversitesi"
+  },
+  {
+    "name": "Beykent Üniversitesi"
+  },
+  {
+    "name": "Bilecik Şeyh Edebali Üniversitesi"
+  },
+  {
+    "name": "Bingöl Üniversitesi"
+  },
+  {
+    "name": "Boğaziçi Üniversitesi"
+  },
+  {
+    "name": "Bozok Üniversitesi"
+  },
+  {
+    "name": "Bursa Teknik Üniversitesi"
+  },
+  {
+    "name": "Celal Bayar Üniversitesi"
+  },
+  {
+    "name": "Cumhuriyet Üniversitesi"
+  },
+  {
+    "name": "Çanakkale Onsekiz Mart Üniversitesi"
+  },
+  {
+    "name": "Çankaya Üniversitesi"
+  },
+  {
+    "name": "Çukurova Üniversitesi"
+  },
+  {
+    "name": "Dicle Üniversitesi"
+  },
+  {
+    "name": "Dokuz Eylül Üniversitesi"
+  },
+  {
+    "name": "Düzce Üniversitesi"
+  },
+  {
+    "name": "Ege Üniversitesi"
+  },
+  {
+    "name": "Erciyes Üniversitesi"
+  },
+  {
+    "name": "Erzincan Üniversitesi"
+  },
+  {
+    "name": "Erzurum Teknik Üniversitesi"
+  },
+  {
+    "name": "Eskişehir Osmangazi Üniversitesi"
+  },
+  {
+    "name": "Fırat Üniversitesi"
+  },
+  {
+    "name": "Galatasaray Üniversitesi"
+  },
+  {
+    "name": "Gazi Üniversitesi"
+  },
+  {
+    "name": "Gaziantep Üniversitesi"
+  },
+  {
+    "name": "Gaziosmanpaşa Üniversitesi"
+  },
+  {
+    "name": "Gebze Teknik Üniversitesi"
+  },
+  {
+    "name": "Giresun Üniversitesi"
+  },
+  {
+    "name": "Hacettepe Üniversitesi"
+  },
+  {
+    "name": "Hakkari Üniversitesi"
+  },
+  {
+    "name": "Harran Üniversitesi"
+  },
+  {
+    "name": "Hitit Üniversitesi"
+  },
+  {
+    "name": "Iğdır Üniversitesi"
+  },
+  {
+    "name": "İnönü Üniversitesi"
+  },
+  {
+    "name": "İskenderun Teknik Üniversitesi"
+  },
+  {
+    "name": "İstanbul Medipol Üniversitesi"
+  },
+  {
+    "name": "İstanbul Sabahattin Zaim Üniversitesi"
+  },
+  {
+    "name": "İstanbul Teknik Üniversitesi"
+  },
+  {
+    "name": "İstanbul Üniversitesi"
+  },
+  {
+    "name": "İzmir Bakırçay Üniversitesi"
+  },
+  {
+    "name": "İzmir Demokrasi Üniversitesi"
+  },
+  {
+    "name": "İzmir Ekonomi Üniversitesi"
+  },
+  {
+    "name": "İzmir Kâtip Çelebi Üniversitesi"
+  },
+  {
+    "name": "İzmir Yüksek Teknoloji Enstitüsü"
+  },
+  {
+    "name": "Kadir Has Üniversitesi"
+  },
+  {
+    "name": "Kafkas Üniversitesi"
+  },
+  {
+    "name": "Kahramanmaraş Sütçü İmam Üniversitesi"
+  },
+  {
+    "name": "Karabük Üniversitesi"
+  },
+  {
+    "name": "Karadeniz Teknik Üniversitesi"
+  },
+  {
+    "name": "Karamanoğlu Mehmetbey Üniversitesi"
+  },
+  {
+    "name": "Kastamonu Üniversitesi"
+  },
+  {
+    "name": "Kırıkkale Üniversitesi"
+  },
+  {
+    "name": "Kilis 7 Aralık Üniversitesi"
+  },
+  {
+    "name": "Kırklareli Üniversitesi"
+  },
+  {
+    "name": "Kocaeli Üniversitesi"
+  },
+  {
+    "name": "Konya Teknik Üniversitesi"
+  },
+  {
+    "name": "KTO Karatay Üniversitesi"
+  },
+  {
+    "name": "Maltepe Üniversitesi"
+  },
+  {
+    "name": "Manisa Celal Bayar Üniversitesi"
+  },
+  {
+    "name": "Mardin Artuklu Üniversitesi"
+  },
+  {
+    "name": "Marmara Üniversitesi"
+  },
+  {
+    "name": "Mehmet Akif Ersoy Üniversitesi"
+  },
+  {
+    "name": "Mersin Üniversitesi"
+  },
+  {
+    "name": "Mimar Sinan Güzel Sanatlar Üniversitesi"
+  },
+  {
+    "name": "Muğla Sıtkı Koçman Üniversitesi"
+  },
+  {
+    "name": "Muş Alparslan Üniversitesi"
+  },
+  {
+    "name": "Mustafa Kemal Üniversitesi"
+  },
+  {
+    "name": "Namık Kemal Üniversitesi"
+  },
+  {
+    "name": "Necmettin Erbakan Üniversitesi"
+  },
+  {
+    "name": "Nevşehir Hacı Bektaş Veli Üniversitesi"
+  },
+  {
+    "name": "Niğde Ömer Halisdemir Üniversitesi"
+  },
+  {
+    "name": "Nişantaşı Üniversitesi"
+  },
+  {
+    "name": "Ondokuz Mayıs Üniversitesi"
+  },
+  {
+    "name": "Ordu Üniversitesi"
+  },
+  {
+    "name": "Osmaniye Korkut Ata Üniversitesi"
+  },
+  {
+    "name": "Özyeğin Üniversitesi"
+  },
+  {
+    "name": "Pamukkale Üniversitesi"
+  },
+  {
+    "name": "Recep Tayyip Erdoğan Üniversitesi"
+  },
+  {
+    "name": "Sakarya Üniversitesi"
+  },
+  {
+    "name": "Sakarya Uygulamalı Bilimler Üniversitesi"
+  },
+  {
+    "name": "Selçuk Üniversitesi"
+  },
+  {
+    "name": "Siirt Üniversitesi"
+  },
+  {
+    "name": "Sinop Üniversitesi"
+  },
+  {
+    "name": "Sivas Cumhuriyet Üniversitesi"
+  },
+  {
+    "name": "Süleyman Demirel Üniversitesi"
+  },
+  {
+    "name": "Şırnak Üniversitesi"
+  },
+  {
+    "name": "Trabzon Üniversitesi"
+  },
+  {
+    "name": "Türk-Alman Üniversitesi"
+  },
+  {
+    "name": "Ufuk Üniversitesi"
+  },
+  {
+    "name": "Uludağ Üniversitesi"
+  },
+  {
+    "name": "Uşak Üniversitesi"
+  },
+  {
+    "name": "Yalova Üniversitesi"
+  },
+  {
+    "name": "Yeditepe Üniversitesi"
+  },
+  {
+    "name": "Yıldız Teknik Üniversitesi"
+  },
+  {
+    "name": "Yozgat Bozok Üniversitesi"
+  },
+  {
+    "name": "Zonguldak Bülent Ecevit Üniversitesi"
+  }
+]

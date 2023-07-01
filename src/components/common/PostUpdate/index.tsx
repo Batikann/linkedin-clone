@@ -3,23 +3,39 @@ import { AiFillPicture, AiFillYoutube } from 'react-icons/ai'
 import { BsCalendarDate, BsNewspaper } from 'react-icons/bs'
 import { useState, useMemo } from 'react'
 import ModalComponent from '../Modal'
-import { postStatus, getPosts } from '../../../api/FirestoreAPI'
-import { post } from '../type'
+import { postStatus, getPosts, getCurrentUser } from '../../../api/FirestoreAPI'
+import { User, post } from '../type'
 import PostCard from '../PostCard'
+import { getTimeHelper } from '../../../helpers/dateFnsHelper'
+import { v4 as uuidv4 } from 'uuid'
 
 const PostStatus = () => {
+  const email = localStorage.getItem('userEmail')
+
   const [modal, setModal] = useState<boolean>(false)
+  const [currentUser, setCurrentUser] = useState<User | undefined>()
+
+  getCurrentUser(setCurrentUser)
   const [text, setText] = useState<string>('')
   const [posts, setPosts] = useState<post[]>([])
   const addPost = async () => {
-    await postStatus(text)
+    let obj = {
+      postID: uuidv4(),
+      userID: currentUser?.userID,
+      text: text,
+      timeStamp: getTimeHelper('HH:mm:ss'),
+      email: email,
+      author: currentUser?.firstName
+        ? currentUser?.firstName + ' ' + currentUser?.lastName
+        : currentUser?.fullName,
+    }
+    await postStatus(obj)
     await setModal(false)
     setText('')
   }
   useMemo(() => {
     getPosts(setPosts)
   }, [])
-  console.log(posts)
 
   return (
     <div className="flex flex-col gap-6">
@@ -66,7 +82,13 @@ const PostStatus = () => {
         {posts.map((post) => {
           return (
             <span key={post.id}>
-              <PostCard id={post.id} status={post.status} />
+              <PostCard
+                id={post.id}
+                text={post.text}
+                timeStamp={post.timeStamp}
+                email={post.email}
+                author={post.author}
+              />
             </span>
           )
         })}
