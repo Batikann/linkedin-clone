@@ -11,6 +11,7 @@ export type post = {
   author: string | null
   userID?: string
   postID?: string
+  headline?: string
 }
 
 export type User = {

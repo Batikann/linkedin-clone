@@ -28,6 +28,7 @@ const PostStatus = () => {
       author: currentUser?.firstName
         ? currentUser?.firstName + ' ' + currentUser?.lastName
         : currentUser?.fullName,
+      headline: currentUser?.headline,
     }
     await postStatus(obj)
     await setModal(false)
@@ -88,6 +89,8 @@ const PostStatus = () => {
                 timeStamp={post.timeStamp}
                 email={post.email}
                 author={post.author}
+                headline={post.headline}
+                userID={currentUser?.id}
               />
             </span>
           )

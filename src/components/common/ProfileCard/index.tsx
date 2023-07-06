@@ -18,14 +18,14 @@ const ProfileCard = () => {
   const [posts, setPosts] = useState<post[]>([])
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   useMemo(() => {
+    getCurrentUser(setCurrentUser)
+    getPosts(setPosts)
     if (location?.state?.id) {
       getSingleStatus(setCurrentUser, location.state.id)
     }
     if (location?.state?.email) {
       getSingleUser(setCurrentProfile, location.state.email)
     }
-    getCurrentUser(setCurrentUser)
-    getPosts(setPosts)
   }, [])
 
   return (
@@ -62,11 +62,15 @@ const ProfileCard = () => {
               : currentProfile.education}
           </p>
         </div>
-        <BiPencil
-          onClick={() => setModalOpen(true)}
-          size={35}
-          className="cursor-pointer hover:bg-slate-200 p-1 rounded-full transition-all duration-300 absolute right-2 top-2"
-        />
+        {Object.values(currentProfile).length === 0 ? (
+          <BiPencil
+            onClick={() => setModalOpen(true)}
+            size={35}
+            className="cursor-pointer hover:bg-slate-200 p-1 rounded-full transition-all duration-300 absolute right-2 top-2"
+          />
+        ) : (
+          ''
+        )}
       </div>
       <div className="flex flex-col gap-6 justify-center items-center mt-5">
         {posts

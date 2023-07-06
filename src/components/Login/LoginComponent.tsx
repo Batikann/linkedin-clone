@@ -8,8 +8,8 @@ import logo from '../../assets/logo.svg'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { loginValidationSchema } from '../../schema/loginValidationSchema'
 import classNames from 'classnames'
-import { emailAlreadyExists, postUserData } from '../../api/FirestoreAPI'
-
+import { postUserData } from '../../api/FirestoreAPI'
+import { v4 as uuidv4 } from 'uuid'
 const LoginComponent = () => {
   const navigate = useNavigate()
 
@@ -21,13 +21,17 @@ const LoginComponent = () => {
 
   const loginWithGoogle = async () => {
     const res = await GoogleSignInAPI()
-    const status = await emailAlreadyExists(localStorage.getItem('userEmail')!)
-    if (status) {
-      postUserData({ fullName: res.fullName, email: res.email })
+    if (res.state) {
+      postUserData({
+        userID: uuidv4(),
+        fullName: res.firstName,
+        email: res.email,
+        firstName: res.firstName,
+        lastName: '',
+      })
+      localStorage.setItem('userEmail', res.email!)
+      res.state ? navigate('/home') : ''
     }
-
-    localStorage.setItem('userEmail', res.email!)
-    res.state ? navigate('/home') : ''
   }
 
   return (

@@ -9,6 +9,7 @@ import {
 import { toast } from 'react-toastify'
 
 import { auth, provider } from '../firebase/config'
+import { checkIfUserExists } from './FirestoreAPI'
 
 export const LoginAPI = async (email: string, password: string) => {
   let state = false
@@ -49,24 +50,29 @@ export const RegisterAPI = async (
 
 export const GoogleSignInAPI = async () => {
   let state = false
-  let fullName
+  let firstName
   let email
-  await signInWithPopup(auth, provider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result)!
-      const token = credential.accessToken
-      fullName = result.user.displayName
-      email = result.user.email
-      state = true
-      console.log(fullName)
-      console.log(email)
 
-      toast.success('Giriş İşlemi Başarılı')
+  await signInWithPopup(auth, provider)
+    .then(async (result) => {
+      const res = await checkIfUserExists(result.user.email!)
+      if (!res) {
+        const credential = GoogleAuthProvider.credentialFromResult(result)!
+        const token = credential.accessToken
+        firstName = result.user.displayName
+        email = result.user.email
+        state = true
+        console.log(firstName)
+        console.log(email)
+        toast.success('Giriş İşlemi Başarılı')
+      } else {
+        state = false
+      }
     })
     .catch((error) => {
       toast.error(error.message)
     })
-  return { state, email, fullName }
+  return { state, email, firstName }
 }
 
 export const logout = async () => {

@@ -4,7 +4,7 @@ import { updateProfileSchema } from '../../../schema/updateProfileSchema'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import universities from '../../mocks/universitesTurkey.json'
-import { editProfile, getCurrentUser } from '../../../api/FirestoreAPI'
+import { editProfile } from '../../../api/FirestoreAPI'
 import { userDatabase } from '../../../api/type'
 
 interface University {
@@ -12,13 +12,13 @@ interface University {
 }
 
 const ProfileEdit = ({ modalOpen, setModalOpen, currentUser }: any) => {
+  useEffect(() => {
+    setTest(currentUser)
+  }, [currentUser])
   const [countries, setCountries] = useState([])
   const [city, setCity] = useState([])
   const [university, setUniversity] = useState<{ value: string }[]>([])
   const [test, setTest] = useState<userDatabase>()
-  useEffect(() => {
-    getCurrentUser(setTest)
-  }, [])
   const handleSearchCountry = async (value: any) => {
     try {
       const response = await axios.get(
@@ -67,15 +67,6 @@ const ProfileEdit = ({ modalOpen, setModalOpen, currentUser }: any) => {
     }
   }
 
-  const initialValues = {
-    firstName: test?.firstName,
-    lastName: test?.lastName,
-    additionalName: test?.additionalName,
-    headline: test?.headline,
-    education: test?.education,
-    country: test?.country,
-    city: test?.city,
-  }
   return (
     <>
       <Modal
@@ -88,7 +79,7 @@ const ProfileEdit = ({ modalOpen, setModalOpen, currentUser }: any) => {
       >
         <h3 className="mb-4">* Zorunlu alanları gösterir</h3>
         <Formik
-          initialValues={initialValues}
+          initialValues={test!}
           validationSchema={updateProfileSchema}
           onSubmit={(values, { resetForm }) => {
             editProfile(currentUser.id, values)

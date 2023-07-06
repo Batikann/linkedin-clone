@@ -51,7 +51,9 @@ const Navbar = () => {
   return (
     <div className="md:h-[53px] h-[73px]   w-full md:justify-center justify-between lg:gap-20 md:gap-8 gap-4 items-center flex p-6 bg-white ">
       <div className="flex items-center md:h-[53px] h-[73px] gap-4 justify-center ">
-        <BsLinkedin size={40} className="text-light-blue" />
+        <Link to="/home">
+          <BsLinkedin size={40} className="text-light-blue" />
+        </Link>
         <div
           className={
             searchBar

@@ -7,7 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { registerValidationSchema } from '../../schema/validationSchema'
 import { User } from '../type'
 import classNames from 'classnames'
-import { emailAlreadyExists, postUserData } from '../../api/FirestoreAPI'
+import { postUserData } from '../../api/FirestoreAPI'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 const RegisterComponent = () => {
@@ -24,12 +24,17 @@ const RegisterComponent = () => {
 
   const loginWithGoogle = async () => {
     let res = await GoogleSignInAPI()
-    const status = await emailAlreadyExists(localStorage.getItem('userEmail')!)
-    if (status) {
-      postUserData({ fullName: res.fullName, email: res.email })
+    if (res.state) {
+      postUserData({
+        userID: uuidv4(),
+        lastName: '',
+        firstName: res.firstName,
+        email: res.email,
+        fullName: res.firstName,
+      })
+      localStorage.setItem('userEmail', res.email!)
+      res.state ? navigate('/') : ''
     }
-    localStorage.setItem('userEmail', res.email!)
-    res.state ? navigate('/') : ''
   }
 
   const alertBox = () => {
@@ -58,13 +63,16 @@ const RegisterComponent = () => {
                 fullName
               )
 
-              localStorage.setItem('userEmail', values.email)
-              postUserData({
-                userID: values.userID,
-                fullName: fullName,
-                email: values.email,
-              })
-              res ? navigate('/') : ''
+              if (res.state) {
+                localStorage.setItem('userEmail', values.email)
+                postUserData({
+                  userID: values.userID,
+                  firstName: values.firstName,
+                  lastName: values.lastName,
+                  email: values.email,
+                })
+                res ? navigate('/') : ''
+              }
             }}
           >
             {({ errors, values }) => (

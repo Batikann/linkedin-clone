@@ -4,18 +4,19 @@ import {
   collection,
   doc,
   getDocs,
-  getFirestore,
-  limit,
+  setDoc,
   onSnapshot,
   query,
   updateDoc,
   where,
+  deleteDoc,
 } from 'firebase/firestore'
 import { toast } from 'react-toastify'
 import { userDatabase } from './type'
 
 const postRef = collection(firestore, 'posts')
-const userRef = collection(firestore, 'users')
+export const userRef = collection(firestore, 'users')
+const likeRef = collection(firestore, 'likes')
 
 export const postStatus = (status: any) => {
   addDoc(postRef, status)
@@ -72,13 +73,9 @@ export const editProfile = (userID: string, payload: any) => {
     })
 }
 
-export const emailAlreadyExists = async (email: string) => {
-  const db = getFirestore()
-
-  const querySnapshot = await getDocs(
-    query(collection(db, 'emails'), where('email', '==', email), limit(1))
-  )
-
+export const checkIfUserExists = async (email: string) => {
+  const q = query(userRef, where('email', '==', email))
+  const querySnapshot = await getDocs(q)
   return !querySnapshot.empty
 }
 
@@ -102,4 +99,37 @@ export const getSingleUser = (setCurrentUser: any, email: string) => {
       })[0]
     )
   })
+}
+
+export const likeButton = (postID: string, userID: string, liked: boolean) => {
+  try {
+    let docToLike = doc(likeRef, `${userID}_${postID}`)
+    if (liked) {
+      deleteDoc(docToLike)
+    } else {
+      setDoc(docToLike, { userID, postID })
+    }
+  } catch (error: any) {
+    toast.error(error.message)
+  }
+}
+
+export const getLikesByUser = (
+  userID: string,
+  postID: string,
+  setLiked: any,
+  setLikesCount: any
+) => {
+  try {
+    let likeQuery = query(likeRef, where('postID', '==', postID))
+    onSnapshot(likeQuery, (snapshot) => {
+      let likes = snapshot.docs.map((doc) => doc.data())
+      let likesCount = likes.length
+      const isLiked = likes.some((like) => like.userID === userID)
+      setLikesCount(likesCount)
+      setLiked(isLiked)
+    })
+  } catch (error: any) {
+    toast.error(error.message)
+  }
 }
