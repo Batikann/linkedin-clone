@@ -1,12 +1,17 @@
 import { post } from '../type'
 import { useMemo, useState } from 'react'
-import { AiFillLike } from 'react-icons/ai'
-import { BiUserCircle, BiLike } from 'react-icons/bi'
-import { BsThreeDots, BsShare, BsSendFill } from 'react-icons/bs'
+import { AiFillLike, AiFillPicture } from 'react-icons/ai'
+import { BiUserCircle } from 'react-icons/bi'
+import { BsThreeDots, BsShare, BsSendFill, BsEmojiSmile } from 'react-icons/bs'
 import { FaRegCommentDots } from 'react-icons/fa'
 import { GiEarthAmerica } from 'react-icons/gi'
 import { useNavigate } from 'react-router-dom'
-import { getLikesByUser, likeButton } from '../../../api/FirestoreAPI'
+import {
+  getComments,
+  getLikesByUser,
+  likeButton,
+  postComment,
+} from '../../../api/FirestoreAPI'
 
 const PostCard = ({
   text,
@@ -20,11 +25,24 @@ const PostCard = ({
   const navigate = useNavigate()
   const [likesCount, setLikesCount] = useState<number>(0)
   const [liked, setLiked] = useState<boolean>(false)
+  const [showCommentBox, setShowCommentBox] = useState<boolean>(false)
+  const [showComments, setShowComments] = useState<boolean>(false)
+  const [comment, setComment] = useState<string>('')
+
+  const [comments, setComments] = useState([])
   const handleLikeBtn = () => {
     likeButton(id, userID!, liked)
   }
+
+  const getComment = (e) => {
+    e.preventDefault()
+    postComment(id, comment, timeStamp)
+    setComment('')
+  }
+
   useMemo(() => {
     getLikesByUser(userID!, id, setLiked, setLikesCount)
+    getComments(id, setComments)
   }, [id, userID])
 
   return (
@@ -63,8 +81,11 @@ const PostCard = ({
         ) : (
           ''
         )}
-        <p className="cursor-pointer hover:underline hover:text-blue-500 underline-offset-2 text-sm">
-          1 yorum
+        <p
+          className="cursor-pointer hover:underline hover:text-blue-500 underline-offset-2 text-sm"
+          onClick={() => setShowComments(!showComments)}
+        >
+          {comments.length} yorum
         </p>
       </div>
       <div className="border-t border-gray-300">
@@ -84,7 +105,10 @@ const PostCard = ({
               Beğen
             </p>
           </li>
-          <li className="flex gap-3 items-center">
+          <li
+            className=" flex gap-3 items-center cursor-pointer hover:bg-slate-200 p-3 rounded-md"
+            onClick={() => setShowCommentBox(!showCommentBox)}
+          >
             <FaRegCommentDots size={20} />
             <p className="text-sm font-medium text-gray-500 hidden md:block">
               Yorum Yap
@@ -104,6 +128,37 @@ const PostCard = ({
           </li>
         </ul>
       </div>
+      {showCommentBox && (
+        <div className="flex items-center  w-full gap-2 mt-2">
+          <div>
+            <BiUserCircle size={28} />
+          </div>
+          <div className="w-full relative">
+            <form onSubmit={getComment}>
+              <input
+                type="text"
+                placeholder="Yorum ekle..."
+                className="w-full h-10 border border-gray-300 px-4 rounded-full focus:border-2 focus:border-gray-500 outline-none"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </form>
+            <div className="flex gap-5 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2">
+              <BsEmojiSmile size={20} />
+              <AiFillPicture size={20} />
+            </div>
+          </div>
+        </div>
+      )}
+      {showComments && (
+        <div>
+          {comments.length > 0
+            ? comments.map((comment, i) => {
+                return <div key={i}>{comment.comment}</div>
+              })
+            : ''}
+        </div>
+      )}
     </div>
   )
 }

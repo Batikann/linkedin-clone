@@ -17,6 +17,7 @@ import { userDatabase } from './type'
 const postRef = collection(firestore, 'posts')
 export const userRef = collection(firestore, 'users')
 const likeRef = collection(firestore, 'likes')
+const commentsRef = collection(firestore, 'comments')
 
 export const postStatus = (status: any) => {
   addDoc(postRef, status)
@@ -135,5 +136,35 @@ export const getLikesByUser = (
     })
   } catch (error: any) {
     toast.error(error.message)
+  }
+}
+
+export const postComment = (postID, comment, timeStamp) => {
+  try {
+    addDoc(commentsRef, {
+      postID,
+      comment,
+      timeStamp,
+    })
+  } catch (error: any) {
+    console.log(error.message)
+  }
+}
+
+export const getComments = (postID: string, setComments) => {
+  let singlePostQuery = query(commentsRef, where('postID', '==', postID))
+  onSnapshot(singlePostQuery, (snapshot) => {
+    const comments = snapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      }
+    })
+
+    setComments(comments)
+  })
+  try {
+  } catch (error) {
+    console.log(error)
   }
 }
