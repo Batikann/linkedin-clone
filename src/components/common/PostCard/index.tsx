@@ -69,9 +69,18 @@ const PostCard = ({
       </div>
       <div className="border-t border-gray-300">
         <ul className="flex md:justify-between justify-around pt-4">
-          <li className="flex gap-3 items-center" onClick={handleLikeBtn}>
-            <BiLike size={20} color="red" />
-            <p className="text-sm font-medium text-gray-500 hidden md:block ">
+          <li
+            className="flex gap-3 items-center cursor-pointer hover:bg-slate-200 p-3 rounded-md"
+            onClick={handleLikeBtn}
+          >
+            <AiFillLike size={20} className={liked ? 'text-blue-500' : ''} />
+            <p
+              className={
+                liked
+                  ? 'text-sm font-medium text-blue-500 hidden md:block'
+                  : 'text-sm font-medium text-gray-500 hidden md:block'
+              }
+            >
               Beğen
             </p>
           </li>

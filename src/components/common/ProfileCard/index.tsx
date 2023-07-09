@@ -14,6 +14,8 @@ import { useLocation } from 'react-router-dom'
 const ProfileCard = () => {
   let location = useLocation()
   const [currentUser, setCurrentUser] = useState<User | undefined>()
+  console.log(currentUser)
+
   const [currentProfile, setCurrentProfile] = useState<User>({})
   const [posts, setPosts] = useState<post[]>([])
   const [modalOpen, setModalOpen] = useState<boolean>(false)

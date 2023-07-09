@@ -7,7 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { registerValidationSchema } from '../../schema/validationSchema'
 import { User } from '../type'
 import classNames from 'classnames'
-import { postUserData } from '../../api/FirestoreAPI'
+import { checkIfUserExists, postUserData } from '../../api/FirestoreAPI'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 const RegisterComponent = () => {
@@ -24,7 +24,8 @@ const RegisterComponent = () => {
 
   const loginWithGoogle = async () => {
     let res = await GoogleSignInAPI()
-    if (res.state) {
+    const state = await checkIfUserExists(res.email!)
+    if (state) {
       postUserData({
         userID: uuidv4(),
         lastName: '',
@@ -33,7 +34,7 @@ const RegisterComponent = () => {
         fullName: res.firstName,
       })
       localStorage.setItem('userEmail', res.email!)
-      res.state ? navigate('/') : ''
+      state ? navigate('/') : ''
     }
   }
 

@@ -49,30 +49,23 @@ export const RegisterAPI = async (
 }
 
 export const GoogleSignInAPI = async () => {
-  let state = false
   let firstName
   let email
 
   await signInWithPopup(auth, provider)
     .then(async (result) => {
-      const res = await checkIfUserExists(result.user.email!)
-      if (!res) {
-        const credential = GoogleAuthProvider.credentialFromResult(result)!
-        const token = credential.accessToken
-        firstName = result.user.displayName
-        email = result.user.email
-        state = true
-        console.log(firstName)
-        console.log(email)
-        toast.success('Giriş İşlemi Başarılı')
-      } else {
-        state = false
-      }
+      const credential = GoogleAuthProvider.credentialFromResult(result)!
+      const token = credential.accessToken
+      firstName = result.user.displayName
+      email = result.user.email
+      console.log(firstName)
+      console.log(email)
+      toast.success('Giriş İşlemi Başarılı')
     })
     .catch((error) => {
       toast.error(error.message)
     })
-  return { state, email, firstName }
+  return { email, firstName }
 }
 
 export const logout = async () => {

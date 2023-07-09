@@ -76,7 +76,11 @@ export const editProfile = (userID: string, payload: any) => {
 export const checkIfUserExists = async (email: string) => {
   const q = query(userRef, where('email', '==', email))
   const querySnapshot = await getDocs(q)
-  return !querySnapshot.empty
+  if (!querySnapshot.empty) {
+    return false
+  } else {
+    return true
+  }
 }
 
 export const getSingleStatus = (setAllStatus: any, id: string) => {
