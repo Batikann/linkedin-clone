@@ -21,6 +21,7 @@ const PostCard = ({
   email,
   headline,
   userID,
+  user,
 }: post) => {
   const navigate = useNavigate()
   const [likesCount, setLikesCount] = useState<number>(0)
@@ -28,15 +29,22 @@ const PostCard = ({
   const [showCommentBox, setShowCommentBox] = useState<boolean>(false)
   const [showComments, setShowComments] = useState<boolean>(false)
   const [comment, setComment] = useState<string>('')
-
   const [comments, setComments] = useState([])
   const handleLikeBtn = () => {
     likeButton(id, userID!, liked)
   }
+  console.log(user)
 
   const getComment = (e) => {
     e.preventDefault()
-    postComment(id, comment, timeStamp)
+    postComment(
+      id,
+      comment,
+      timeStamp,
+      user.headline,
+      user.firstName,
+      user.email
+    )
     setComment('')
   }
 
@@ -151,10 +159,37 @@ const PostCard = ({
         </div>
       )}
       {showComments && (
-        <div>
+        <div className="w-full">
           {comments.length > 0
             ? comments.map((comment, i) => {
-                return <div key={i}>{comment.comment}</div>
+                return (
+                  <div
+                    key={i}
+                    className="flex items-start gap-4  p-2 md:w-[522px] w-[334px]"
+                  >
+                    <BiUserCircle size={30} />
+                    <div className="bg-comment-bg md:w-[462px] w-[334px] p-3 rounded-lg">
+                      <div className="mb-3">
+                        <div className="flex gap-2">
+                          <p className="text-base font-semibold">
+                            {comment.author}
+                          </p>
+                          {email == comment.email ? (
+                            <p className="text-xs text-white bg-slate-500 font-semibold py-1 px-2 rounded-md">
+                              Yazar
+                            </p>
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                        <p className="text-xs">{comment.headline}</p>
+                      </div>
+                      <div className="break-words ">
+                        <p className="text-sm  ">{comment.comment}</p>
+                      </div>
+                    </div>
+                  </div>
+                )
               })
             : ''}
         </div>

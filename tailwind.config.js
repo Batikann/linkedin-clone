@@ -11,6 +11,7 @@ export default {
         'dark-blue': '#004182',
         'register-page': '#F3F2F0',
         'post-color': '#A9A9A9',
+        'comment-bg': '#F2F2F2',
       },
       boxShadow: {
         custom: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',

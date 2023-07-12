@@ -91,6 +91,7 @@ const PostStatus = () => {
                 author={post.author}
                 headline={post.headline}
                 userID={currentUser?.id}
+                user={currentUser}
               />
             </span>
           )

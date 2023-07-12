@@ -139,12 +139,22 @@ export const getLikesByUser = (
   }
 }
 
-export const postComment = (postID, comment, timeStamp) => {
+export const postComment = (
+  postID,
+  comment,
+  timeStamp,
+  headline,
+  author,
+  email
+) => {
   try {
     addDoc(commentsRef, {
       postID,
       comment,
       timeStamp,
+      headline,
+      author,
+      email,
     })
   } catch (error: any) {
     console.log(error.message)
@@ -156,7 +166,7 @@ export const getComments = (postID: string, setComments) => {
   onSnapshot(singlePostQuery, (snapshot) => {
     const comments = snapshot.docs.map((doc) => {
       return {
-        id: doc.id,
+        userID: doc.id,
         ...doc.data(),
       }
     })
