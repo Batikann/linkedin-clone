@@ -1,5 +1,5 @@
 import { post } from '../type'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { AiFillLike, AiFillPicture } from 'react-icons/ai'
 import { BiUserCircle } from 'react-icons/bi'
 import { BsThreeDots, BsShare, BsSendFill, BsEmojiSmile } from 'react-icons/bs'
@@ -12,15 +12,16 @@ import {
   likeButton,
   postComment,
 } from '../../../api/FirestoreAPI'
+import { getRelativeTime } from '../../../utils/dateUtils'
 
 const PostCard = ({
   text,
-  timeStamp,
   author,
   id,
   email,
   headline,
   userID,
+  timeStamp,
   user,
 }: post) => {
   const navigate = useNavigate()
@@ -33,16 +34,26 @@ const PostCard = ({
   const handleLikeBtn = () => {
     likeButton(id, userID!, liked)
   }
-  console.log(user)
+  const timeStamp2 = getRelativeTime()
+
+  useEffect(() => {
+    setComments(
+      comments.sort((a, b) => {
+        const dateA = new Date(a.timeStamp)
+        const dateB = new Date(b.timeStamp)
+        return dateB - dateA
+      })
+    )
+  }, [setComments, comments])
 
   const getComment = (e) => {
     e.preventDefault()
     postComment(
       id,
       comment,
-      timeStamp,
+      timeStamp2,
       user.headline,
-      user.firstName,
+      user.firstName + ' ' + user.lastName,
       user.email
     )
     setComment('')
@@ -69,7 +80,7 @@ const PostCard = ({
             </p>
             <p className="text-xs text-gray-500">{headline}</p>
             <div className="flex gap-1 items-center">
-              <p className="text-xs text-gray-500">{timeStamp.timeAgo}</p>
+              <p className="text-xs text-gray-500">{timeStamp}</p>
               <span>&#183;</span>
               <GiEarthAmerica className="text-gray-600" />
             </div>
@@ -168,24 +179,29 @@ const PostCard = ({
                     className="flex items-start gap-4  p-2 md:w-[522px] w-[334px]"
                   >
                     <BiUserCircle size={30} />
-                    <div className="bg-comment-bg md:w-[462px] w-[334px] p-3 rounded-lg">
-                      <div className="mb-3">
-                        <div className="flex gap-2">
-                          <p className="text-base font-semibold">
-                            {comment.author}
-                          </p>
-                          {email == comment.email ? (
-                            <p className="text-xs text-white bg-slate-500 font-semibold py-1 px-2 rounded-md">
-                              Yazar
+                    <div className="bg-comment-bg md:w-[462px] w-[334px] p-3 rounded-lg flex justify-between">
+                      <div>
+                        <div className="mb-3">
+                          <div className="flex gap-2">
+                            <p className="text-base font-semibold">
+                              {comment.author}
                             </p>
-                          ) : (
-                            ''
-                          )}
+                            {email == comment.email ? (
+                              <p className="text-xs text-white bg-slate-500 font-semibold py-1 px-2 rounded-md">
+                                Yazar
+                              </p>
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                          <p className="text-xs">{comment.headline}</p>
                         </div>
-                        <p className="text-xs">{comment.headline}</p>
+                        <div className="break-words ">
+                          <p className="text-sm  ">{comment.comment}</p>
+                        </div>
                       </div>
-                      <div className="break-words ">
-                        <p className="text-sm  ">{comment.comment}</p>
+                      <div className="text-xs font-semibold">
+                        {comment.timeStamp}
                       </div>
                     </div>
                   </div>

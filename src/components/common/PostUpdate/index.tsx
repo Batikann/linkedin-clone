@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { AiFillPicture, AiFillYoutube } from 'react-icons/ai'
 import { BsCalendarDate, BsNewspaper } from 'react-icons/bs'
@@ -6,24 +7,25 @@ import ModalComponent from '../Modal'
 import { postStatus, getPosts, getCurrentUser } from '../../../api/FirestoreAPI'
 import { User, post } from '../type'
 import PostCard from '../PostCard'
-import { getTimeHelper } from '../../../helpers/dateFnsHelper'
 import { v4 as uuidv4 } from 'uuid'
+import { getRelativeTime } from '../../../utils/dateUtils'
 
 const PostStatus = () => {
   const email = localStorage.getItem('userEmail')
 
   const [modal, setModal] = useState<boolean>(false)
   const [currentUser, setCurrentUser] = useState<User | undefined>()
-
+  const [futureTime, setFutureTime] = useState('')
   getCurrentUser(setCurrentUser)
   const [text, setText] = useState<string>('')
   const [posts, setPosts] = useState<post[]>([])
+
   const addPost = async () => {
     let obj = {
       postID: uuidv4(),
       userID: currentUser?.userID,
       text: text,
-      timeStamp: getTimeHelper('HH:mm:ss'),
+      timeStamp: getRelativeTime(),
       email: email,
       author: currentUser?.firstName
         ? currentUser?.firstName + ' ' + currentUser?.lastName
@@ -37,6 +39,16 @@ const PostStatus = () => {
   useMemo(() => {
     getPosts(setPosts)
   }, [])
+
+  useEffect(() => {
+    setPosts(
+      posts.sort((a, b) => {
+        const dateA = new Date(a.timeStamp)
+        const dateB = new Date(b.timeStamp)
+        return dateB - dateA
+      })
+    )
+  }, [setPosts, posts])
 
   return (
     <div className="flex flex-col gap-6">
