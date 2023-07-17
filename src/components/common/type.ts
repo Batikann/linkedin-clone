@@ -26,4 +26,5 @@ export type User = {
   education?: string
   headline?: string
   additionalName?: string
+  imageLink?: string
 }

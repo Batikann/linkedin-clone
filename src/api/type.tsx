@@ -11,3 +11,17 @@ export type userDatabase = {
   headline?: string
   id?: string
 }
+
+export type File = {
+  name?: string
+  lastModified?: number
+  lastModifiedDate?: Object
+  size?: number
+  type?: string
+  webkitRelativePath?: string
+  arrayBuffer?: string
+  stream?: string
+  text?: string
+  prototype?: string
+  slice?: string
+}
