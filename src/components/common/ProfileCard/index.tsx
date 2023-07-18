@@ -11,16 +11,18 @@ import { FiCamera } from 'react-icons/fi'
 import ProfileEdit from '../ProfileEdit'
 import PostCard from '../PostCard'
 import { useLocation } from 'react-router-dom'
-import { uploadImage } from '../../../api/Storage'
-import { File } from '../../../api/type'
+import ImageUploadModalComponents from '../ImageUploadModal'
+import BgImageUploadModal from '../bgImageUploadModal'
 
 const ProfileCard = () => {
   let location = useLocation()
   const [currentUser, setCurrentUser] = useState<User | undefined>()
   const [currentProfile, setCurrentProfile] = useState<User>({})
   const [posts, setPosts] = useState<post[]>([])
-  const [currentImage, setCurrentImage] = useState<File>({})
   const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [imageUploadModal, setImageUploadModal] = useState<boolean>(false)
+  const [bgImageModal, setBgImageModal] = useState<boolean>(false)
+
   useMemo(() => {
     getCurrentUser(setCurrentUser)
     getPosts(setPosts)
@@ -32,33 +34,41 @@ const ProfileCard = () => {
     }
   }, [])
 
-  const getImage = (event) => {
-    setCurrentImage(event.target.files[0])
-  }
-
-  const uploadImageAPI = () => {
-    uploadImage(currentImage, currentUser?.id)
-  }
-
   return (
     <div className="max-w-5xl mx-auto min-h-screen">
-      {/* <input type={'file'} onChange={getImage} />
-      <button onClick={uploadImageAPI}>Ekle</button> */}
-
       <div className=" mt-8 bg-white flex flex-col relative ">
         <div className="relative">
           <img
-            src="https://media.licdn.com/dms/image/C4D1BAQHAEidT5HpcMA/company-background_10000/0/1608756742727?e=1690142400&v=beta&t=hZfsERvILGfeNhXGtgqmW7oPxqegXj6IA6zFaTmw_po"
+            src={
+              Object.values(currentProfile).length === 0
+                ? currentUser?.bgImageLink
+                  ? currentUser.bgImageLink
+                  : 'https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/wp-cms/uploads/2021/03/LinkedIn-Default-Background-2020-.jpg'
+                : currentProfile.bgImageLink
+                ? currentProfile.bgImageLink
+                : 'https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/wp-cms/uploads/2021/03/LinkedIn-Default-Background-2020-.jpg'
+            }
+            className="w-full h-64 object-cover "
             alt=""
           />
           <FiCamera
-            size={35}
-            className="absolute top-4 right-4 cursor-pointer hover:bg-white p-1 rounded-full"
+            size={30}
+            className="absolute top-4 right-4 cursor-pointer bg-white p-1 rounded-full text-light-blue hover:text-dark-blue"
+            onClick={() => setBgImageModal(true)}
           />
           {currentUser && (
             <img
               className="w-32 h-32 rounded-full absolute object-cover -bottom-12 left-9 cursor-pointer"
-              src={currentUser.imageLink}
+              src={
+                Object.values(currentProfile).length === 0
+                  ? currentUser?.imageLink
+                    ? currentUser.imageLink
+                    : 'https://i.seadn.io/gae/y2QcxTcchVVdUGZITQpr6z96TXYOV0p3ueLL_1kIPl7s-hHn3-nh8hamBDj0GAUNAndJ9_Yuo2OzYG5Nic_hNicPq37npZ93T5Nk-A?auto=format&dpr=1&w=1000'
+                  : currentProfile.imageLink
+                  ? currentProfile.imageLink
+                  : 'https://i.seadn.io/gae/y2QcxTcchVVdUGZITQpr6z96TXYOV0p3ueLL_1kIPl7s-hHn3-nh8hamBDj0GAUNAndJ9_Yuo2OzYG5Nic_hNicPq37npZ93T5Nk-A?auto=format&dpr=1&w=1000'
+              }
+              onClick={() => setImageUploadModal(true)}
             />
           )}
         </div>
@@ -85,7 +95,7 @@ const ProfileCard = () => {
                 ? currentUser?.headline
                 : currentProfile.headline}
             </p>
-            <p className="text-slate-500 text-sm mt-3">
+            <p className="text-slate-500 text-sm mt-1">
               {Object.values(currentProfile).length === 0
                 ? currentUser?.city
                 : currentProfile.city}
@@ -95,6 +105,17 @@ const ProfileCard = () => {
                   : currentProfile.country}
               </span>
             </p>
+            <div className="flex gap-2 mt-4">
+              <button className="bg-light-blue hover:bg-dark-blue text-white font-semibold py-1 px-4 rounded-full">
+                Açık
+              </button>
+              <button className="border border-light-blue text-light-blue py-1 px-4 rounded-full hover:bg-blue-100 font-semibold">
+                Profil Bölümü Ekle
+              </button>
+              <button className="border border-slate-400 py-1 px-4 text-slate-600 rounded-full hover:bg-slate-100">
+                Daha Fazla
+              </button>
+            </div>
           </div>
           <div>
             <p className="text-sm font-semibold mt-4 hover:text-blue-500 hover:underline hover:underline-offset-2 cursor-pointer">
@@ -132,6 +153,16 @@ const ProfileCard = () => {
       <ProfileEdit
         setModalOpen={setModalOpen}
         modalOpen={modalOpen}
+        currentUser={currentUser}
+      />
+      <ImageUploadModalComponents
+        setImageUploadModal={setImageUploadModal}
+        imageUploadModal={imageUploadModal}
+        currentUser={currentUser}
+      />
+      <BgImageUploadModal
+        setBgImageModal={setBgImageModal}
+        bgImageModal={bgImageModal}
         currentUser={currentUser}
       />
     </div>

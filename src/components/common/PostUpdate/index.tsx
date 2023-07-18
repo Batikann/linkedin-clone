@@ -15,7 +15,6 @@ const PostStatus = () => {
 
   const [modal, setModal] = useState<boolean>(false)
   const [currentUser, setCurrentUser] = useState<User | undefined>()
-  const [futureTime, setFutureTime] = useState('')
   getCurrentUser(setCurrentUser)
   const [text, setText] = useState<string>('')
   const [posts, setPosts] = useState<post[]>([])
@@ -104,6 +103,7 @@ const PostStatus = () => {
                 headline={post.headline}
                 userID={currentUser?.id}
                 user={currentUser}
+                postUserID={post.userID}
               />
             </span>
           )

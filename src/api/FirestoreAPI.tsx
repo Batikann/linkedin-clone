@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore'
 import { toast } from 'react-toastify'
 import { userDatabase } from './type'
+import { User } from '../components/common/type'
 
 const postRef = collection(firestore, 'posts')
 export const userRef = collection(firestore, 'users')
@@ -34,6 +35,18 @@ export const getPosts = (setPosts: any) => {
     setPosts(
       res.docs.map((doc) => {
         return { ...doc.data(), id: doc.id }
+      })
+    )
+  })
+}
+
+export const getAllUsers = (
+  setAllUsers: React.Dispatch<React.SetStateAction<User[]>>
+) => {
+  onSnapshot(userRef, (res) => {
+    setAllUsers(
+      res.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id, userID: doc.data().userID }
       })
     )
   })

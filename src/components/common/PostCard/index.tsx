@@ -1,4 +1,4 @@
-import { post } from '../type'
+import { User, post } from '../type'
 import { useMemo, useState, useEffect } from 'react'
 import { AiFillLike, AiFillPicture } from 'react-icons/ai'
 import { BiUserCircle } from 'react-icons/bi'
@@ -11,6 +11,7 @@ import {
   getLikesByUser,
   likeButton,
   postComment,
+  getAllUsers,
 } from '../../../api/FirestoreAPI'
 import { getRelativeTime } from '../../../utils/dateUtils'
 
@@ -23,6 +24,7 @@ const PostCard = ({
   userID,
   timeStamp,
   user,
+  postUserID,
 }: post) => {
   const navigate = useNavigate()
   const [likesCount, setLikesCount] = useState<number>(0)
@@ -31,6 +33,7 @@ const PostCard = ({
   const [showComments, setShowComments] = useState<boolean>(false)
   const [comment, setComment] = useState<string>('')
   const [comments, setComments] = useState([])
+  const [allUsers, setAllUsers] = useState<User[]>([])
   const handleLikeBtn = () => {
     likeButton(id, userID!, liked)
   }
@@ -62,13 +65,24 @@ const PostCard = ({
   useMemo(() => {
     getLikesByUser(userID!, id, setLiked, setLikesCount)
     getComments(id, setComments)
+    getAllUsers(setAllUsers)
   }, [id, userID])
 
   return (
     <div className="bg-white p-4 border border-gray-300 rounded-lg md:w-[556px] w-full flex flex-col gap-4">
       <div className="flex justify-between ">
         <div className="flex gap-4 items-center">
-          <BiUserCircle size={30} />
+          <img
+            src={allUsers
+              .filter((user) => user.userID == postUserID)
+              .map((item) =>
+                item.imageLink
+                  ? item.imageLink
+                  : 'https://api-private.atlassian.com/users/2dff6b099a5ac2f4baab1bb770899247/avatar'
+              )}
+            alt=""
+            className="w-10 h-10 rounded-full"
+          />
           <div>
             <p
               className="text-sm font-semibold text-black cursor-pointer hover:underline underline-offset-2 hover:text-blue-600"
