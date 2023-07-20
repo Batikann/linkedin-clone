@@ -4,4 +4,6 @@ export type User = {
   password: string
   firstName?: string
   lastName?: string
+  bgImageLink?: string
+  imageLink?: string
 }

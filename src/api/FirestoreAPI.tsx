@@ -19,6 +19,7 @@ const postRef = collection(firestore, 'posts')
 export const userRef = collection(firestore, 'users')
 const likeRef = collection(firestore, 'likes')
 const commentsRef = collection(firestore, 'comments')
+const connectionRef = collection(firestore, 'connection')
 
 export const postStatus = (status: any) => {
   addDoc(postRef, status)
@@ -58,6 +59,26 @@ export const postUserData = (object: any) => {
     .catch((e) => {
       console.log(e.message)
     })
+}
+
+export const editPostText = (postID: string, text: string) => {
+  let updatePost = doc(postRef, postID)
+  try {
+    updateDoc(updatePost, { text })
+    toast.success('Postunuz başarıyla güncellendi')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const deletePostDatabase = (id: string) => {
+  let docDelete = doc(postRef, id)
+  try {
+    deleteDoc(docDelete)
+    toast.success('Postunuz Başarıyla Silindi!')
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const getCurrentUser = (
@@ -158,7 +179,8 @@ export const postComment = (
   timeStamp,
   headline,
   author,
-  email
+  email,
+  userImageLink = ''
 ) => {
   try {
     addDoc(commentsRef, {
@@ -168,6 +190,7 @@ export const postComment = (
       headline,
       author,
       email,
+      userImageLink,
     })
   } catch (error: any) {
     console.log(error.message)
@@ -187,6 +210,56 @@ export const getComments = (postID: string, setComments) => {
     setComments(comments)
   })
   try {
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const addConnection = (userID: string, targetID: string) => {
+  try {
+    let connectionToAdd = doc(connectionRef, `${userID}_${targetID}`)
+    setDoc(connectionToAdd, { userID, targetID })
+    toast.success('Bağlantı Kuruldu!!')
+  } catch (error: any) {
+    toast.error(error.message)
+  }
+}
+
+export const getConnections = (
+  userID: string,
+  targetID: string,
+  setIsConnected: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  try {
+    let connectionQuery = query(
+      connectionRef,
+      where('targetID', '==', targetID)
+    )
+    onSnapshot(connectionQuery, (snapshot) => {
+      let connections = snapshot.docs.map((doc) => doc.data())
+      let isConnected = connections.some(
+        (connection) => connection.userID == userID
+      )
+
+      setIsConnected(isConnected)
+    })
+  } catch (error: any) {
+    toast.error(error.message)
+  }
+}
+
+export const getFollowers = (
+  userID: string,
+  setFollowersCount: React.Dispatch<React.SetStateAction<number>>
+) => {
+  try {
+    let connectionQuery = query(connectionRef, where('userID', '==', userID))
+    onSnapshot(connectionQuery, (snapshot) => {
+      let connections = snapshot.docs.map((doc) => doc.data())
+      let followers = connections.length
+
+      setFollowersCount(followers)
+    })
   } catch (error) {
     console.log(error)
   }

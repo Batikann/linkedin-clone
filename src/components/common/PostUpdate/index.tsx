@@ -1,10 +1,16 @@
 import { useEffect } from 'react'
-import { FaRegUserCircle } from 'react-icons/fa'
+
 import { AiFillPicture, AiFillYoutube } from 'react-icons/ai'
 import { BsCalendarDate, BsNewspaper } from 'react-icons/bs'
 import { useState, useMemo } from 'react'
 import ModalComponent from '../Modal'
-import { postStatus, getPosts, getCurrentUser } from '../../../api/FirestoreAPI'
+import {
+  postStatus,
+  getPosts,
+  getCurrentUser,
+  editPostText,
+  getConnections,
+} from '../../../api/FirestoreAPI'
 import { User, post } from '../type'
 import PostCard from '../PostCard'
 import { v4 as uuidv4 } from 'uuid'
@@ -15,9 +21,10 @@ const PostStatus = () => {
 
   const [modal, setModal] = useState<boolean>(false)
   const [currentUser, setCurrentUser] = useState<User | undefined>()
-  getCurrentUser(setCurrentUser)
   const [text, setText] = useState<string>('')
   const [posts, setPosts] = useState<post[]>([])
+  const [isEdit, setIsEdit] = useState(false)
+  const [postID, setPostID] = useState('')
 
   const addPost = async () => {
     let obj = {
@@ -29,7 +36,7 @@ const PostStatus = () => {
       author: currentUser?.firstName
         ? currentUser?.firstName + ' ' + currentUser?.lastName
         : currentUser?.fullName,
-      headline: currentUser?.headline,
+      headline: currentUser?.headline ? currentUser.headline : '',
     }
     await postStatus(obj)
     await setModal(false)
@@ -37,6 +44,7 @@ const PostStatus = () => {
   }
   useMemo(() => {
     getPosts(setPosts)
+    getCurrentUser(setCurrentUser)
   }, [])
 
   useEffect(() => {
@@ -49,14 +57,25 @@ const PostStatus = () => {
     )
   }, [setPosts, posts])
 
+  const updatePost = () => {
+    editPostText(postID, text)
+    setModal(false)
+  }
   return (
     <div className="flex flex-col gap-6">
       <div className="md:w-[555px] h-[116px] w-full bg-white p-3 flex justify-between flex-col rounded-lg border border-gray-300">
         <div className="flex  gap-4 items-center">
-          <FaRegUserCircle size={25} />
+          <img
+            src={currentUser?.imageLink!}
+            alt=""
+            className="w-10 h-10 rounded-full"
+          />
           <button
             type="button"
-            onClick={() => setModal(true)}
+            onClick={() => {
+              setModal(true)
+              setIsEdit(false)
+            }}
             className="border border-gray-400 w-full h-12 rounded-full  text-sm font-semibold outline-none text-left px-6 text-gray-500 hover:bg-register-page"
           >
             Gönderi başlat
@@ -88,6 +107,8 @@ const PostStatus = () => {
           text={text}
           setText={setText}
           addPost={addPost}
+          isEdit={isEdit}
+          updatePost={updatePost}
         />
       </div>
       <div className="flex flex-col gap-6">
@@ -104,6 +125,10 @@ const PostStatus = () => {
                 userID={currentUser?.id}
                 user={currentUser}
                 postUserID={post.userID}
+                setModal={setModal}
+                setText={setText}
+                setIsEdit={setIsEdit}
+                setPostID={setPostID}
               />
             </span>
           )

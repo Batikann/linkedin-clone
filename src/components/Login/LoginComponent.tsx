@@ -29,6 +29,8 @@ const LoginComponent = () => {
         email: res.email,
         firstName: res.firstName,
         lastName: '',
+        bgImageLink: 'https://shorturl.at/cipC9',
+        imageLink: 'https://shorturl.at/ilBZ5',
       })
     }
     localStorage.setItem('userEmail', res.email!)

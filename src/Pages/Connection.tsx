@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
-import HomeComponent from '../components/Home/HomeComponent'
 import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '../firebase/config'
+import ConnectionLayout from '../layouts/ConnectionLayout'
 import { useNavigate } from 'react-router-dom'
+import { auth } from '../firebase/config'
 import Loader from '../components/common/Loader/Loader'
 
-const Home = () => {
-  const navigate = useNavigate()
+export const Connection = () => {
   const [loading, setLoading] = useState<boolean>(false)
-
+  const navigate = useNavigate()
   useEffect(() => {
     onAuthStateChanged(auth, (res: any) => {
       if (!res?.accessToken) {
@@ -18,6 +17,5 @@ const Home = () => {
       }
     })
   }, [])
-  return loading ? <HomeComponent /> : <Loader />
+  return loading ? <ConnectionLayout /> : <Loader />
 }
-export default Home

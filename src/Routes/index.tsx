@@ -3,6 +3,7 @@ import Login from '../Pages/Login'
 import Register from '../Pages/Register'
 import HomeLayout from '../layouts/HomeLayout'
 import Profile from '../Pages/Profile'
+import { Connection } from '../Pages/Connection'
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -19,5 +20,9 @@ export const router = createBrowserRouter([
   {
     path: '/profile',
     element: <Profile />,
+  },
+  {
+    path: '/connection',
+    element: <Connection />,
   },
 ])

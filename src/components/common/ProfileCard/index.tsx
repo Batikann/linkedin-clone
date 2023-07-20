@@ -1,15 +1,15 @@
 import {
   getCurrentUser,
+  getFollowers,
   getPosts,
   getSingleStatus,
   getSingleUser,
 } from '../../../api/FirestoreAPI'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { User, post } from '../type'
 import { BiPencil } from 'react-icons/bi'
 import { FiCamera } from 'react-icons/fi'
 import ProfileEdit from '../ProfileEdit'
-import PostCard from '../PostCard'
 import { useLocation } from 'react-router-dom'
 import ImageUploadModalComponents from '../ImageUploadModal'
 import BgImageUploadModal from '../bgImageUploadModal'
@@ -22,6 +22,7 @@ const ProfileCard = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [imageUploadModal, setImageUploadModal] = useState<boolean>(false)
   const [bgImageModal, setBgImageModal] = useState<boolean>(false)
+  const [followersCount, setFollowersCount] = useState<number>(0)
 
   useMemo(() => {
     getCurrentUser(setCurrentUser)
@@ -33,22 +34,21 @@ const ProfileCard = () => {
       getSingleUser(setCurrentProfile, location.state.email)
     }
   }, [])
+  useEffect(() => {
+    getFollowers(currentUser?.userID!, setFollowersCount)
+  }, [currentUser?.userID])
 
   return (
     <div className="max-w-5xl mx-auto min-h-screen">
-      <div className=" mt-8 bg-white flex flex-col relative ">
+      <div className=" mt-8 bg-white flex flex-col relative  rounded-lg">
         <div className="relative">
           <img
             src={
               Object.values(currentProfile).length === 0
-                ? currentUser?.bgImageLink
-                  ? currentUser.bgImageLink
-                  : 'https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/wp-cms/uploads/2021/03/LinkedIn-Default-Background-2020-.jpg'
-                : currentProfile.bgImageLink
-                ? currentProfile.bgImageLink
-                : 'https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/wp-cms/uploads/2021/03/LinkedIn-Default-Background-2020-.jpg'
+                ? currentUser?.bgImageLink!
+                : currentProfile.bgImageLink!
             }
-            className="w-full h-64 object-cover "
+            className="w-full h-64 object-cover rounded-t-lg "
             alt=""
           />
           <FiCamera
@@ -61,12 +61,8 @@ const ProfileCard = () => {
               className="w-32 h-32 rounded-full absolute object-cover -bottom-12 left-9 cursor-pointer"
               src={
                 Object.values(currentProfile).length === 0
-                  ? currentUser?.imageLink
-                    ? currentUser.imageLink
-                    : 'https://i.seadn.io/gae/y2QcxTcchVVdUGZITQpr6z96TXYOV0p3ueLL_1kIPl7s-hHn3-nh8hamBDj0GAUNAndJ9_Yuo2OzYG5Nic_hNicPq37npZ93T5Nk-A?auto=format&dpr=1&w=1000'
-                  : currentProfile.imageLink
-                  ? currentProfile.imageLink
-                  : 'https://i.seadn.io/gae/y2QcxTcchVVdUGZITQpr6z96TXYOV0p3ueLL_1kIPl7s-hHn3-nh8hamBDj0GAUNAndJ9_Yuo2OzYG5Nic_hNicPq37npZ93T5Nk-A?auto=format&dpr=1&w=1000'
+                  ? currentUser?.imageLink!
+                  : currentProfile.imageLink!
               }
               onClick={() => setImageUploadModal(true)}
             />
@@ -99,11 +95,14 @@ const ProfileCard = () => {
               {Object.values(currentProfile).length === 0
                 ? currentUser?.city
                 : currentProfile.city}
-              <span>
+              <span className="ml-2">
                 {Object.values(currentProfile).length === 0
                   ? currentUser?.country
                   : currentProfile.country}
               </span>
+            </p>
+            <p className="font-semibold text-sm mt-1 text-light-blue cursor-pointer hover:underline-offset-2 hover:underline">
+              {followersCount} Bağlantı
             </p>
             <div className="flex gap-2 mt-4">
               <button className="bg-light-blue hover:bg-dark-blue text-white font-semibold py-1 px-4 rounded-full">
@@ -125,29 +124,6 @@ const ProfileCard = () => {
             </p>
           </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-6 justify-center items-center mt-5">
-        {posts
-          .filter((item) => {
-            if (Object.values(currentProfile).length == 0) {
-              return item.email == currentUser?.email
-            } else {
-              return item.email == currentProfile?.email
-            }
-          })
-          .map((post) => {
-            return (
-              <span key={post.id}>
-                <PostCard
-                  id={post.id}
-                  text={post.text}
-                  timeStamp={post.timeStamp}
-                  email={post.email}
-                  author={post.author}
-                />
-              </span>
-            )
-          })}
       </div>
 
       <ProfileEdit

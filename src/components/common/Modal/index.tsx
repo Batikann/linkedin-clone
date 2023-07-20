@@ -6,18 +6,26 @@ const ModalComponent = ({
   text,
   setText,
   addPost,
+  isEdit,
+  updatePost,
 }: any) => {
   return (
     <Modal
       title="Basic Modal"
       open={modalOpen}
-      onOk={() => setModalOpen(false)}
-      onCancel={() => setModalOpen(false)}
+      onOk={() => {
+        setText('')
+        setModalOpen(false)
+      }}
+      onCancel={() => {
+        setText('')
+        setModalOpen(false)
+      }}
       footer={[
         <Button
           key="submit"
           type="primary"
-          onClick={addPost}
+          onClick={isEdit ? updatePost : addPost}
           className={
             text
               ? 'bg-blue-600 text-white rounded-full hover:bg-blue-500'
@@ -25,7 +33,7 @@ const ModalComponent = ({
           }
           disabled={text ? false : true}
         >
-          Gönderi
+          {isEdit ? 'Güncelle' : 'Gönderi'}
         </Button>,
       ]}
     >

@@ -93,10 +93,12 @@ const Navbar = () => {
             <IoMdHome size={22} />
             <p className="text-xs hidden lg:block">Ana Sayfa</p>
           </li>
-          <li className="text-gray-500  flex flex-col justify-center items-center hover:text-black  cursor-pointer">
-            <BsPeopleFill size={22} />
-            <p className="text-xs hidden lg:block">Ağım</p>
-          </li>
+          <Link to={'/connection'}>
+            <li className="text-gray-500  flex flex-col justify-center items-center hover:text-black  cursor-pointer">
+              <BsPeopleFill size={22} />
+              <p className="text-xs hidden lg:block">Ağım</p>
+            </li>
+          </Link>
           <li className="text-gray-500 flex flex-col justify-center items-center  hover:text-black  cursor-pointer">
             <BsFillBriefcaseFill size={22} />
             <p className="text-xs hidden lg:block">İş İlanları</p>

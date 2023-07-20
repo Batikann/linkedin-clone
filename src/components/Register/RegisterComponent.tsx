@@ -20,6 +20,8 @@ const RegisterComponent = () => {
     password: '',
     firstName: '',
     lastName: '',
+    bgImageLink: '',
+    imageLink: '',
   }
 
   const loginWithGoogle = async () => {
@@ -32,6 +34,8 @@ const RegisterComponent = () => {
         firstName: res.firstName,
         email: res.email,
         fullName: res.firstName,
+        bgImageLink: 'https://shorturl.at/cipC9',
+        imageLink: 'https://shorturl.at/ilBZ5',
       })
       localStorage.setItem('userEmail', res.email!)
       state ? navigate('/') : ''
@@ -71,6 +75,8 @@ const RegisterComponent = () => {
                   firstName: values.firstName,
                   lastName: values.lastName,
                   email: values.email,
+                  bgImageLink: 'https://shorturl.at/cipC9',
+                  imageLink: 'https://shorturl.at/ilBZ5',
                 })
                 res ? navigate('/') : ''
               }

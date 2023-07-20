@@ -28,4 +28,5 @@ export type User = {
   additionalName?: string
   imageLink?: string | null
   bgImageLink?: string | null
+  getCurrentUser?: void
 }
