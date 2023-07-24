@@ -11,13 +11,17 @@ import { BiUserCircle } from 'react-icons/bi'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Dropdown, MenuProps } from 'antd'
-
 import { logout } from '../../../api/AuthAPI'
 import { useAppDispatch } from '../../../hooks/reduxHooks'
 import { delUser } from '../../../redux/AuthSlice'
+import { User } from '../type'
+import { getUsersBySearch } from '../../../api/FirestoreAPI'
+import { useEffect } from 'react'
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState<boolean>(true)
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [users, setUsers] = useState<User[]>([])
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const goToRoute = (route: string) => {
@@ -28,6 +32,21 @@ const Navbar = () => {
     dispatch(delUser())
     res ? navigate('/') : ''
   }
+
+  const searchUserHandle = (searchValue) => {
+    getUsersBySearch(searchValue, setUsers)
+  }
+
+  const openUser = (user: User) => {
+    navigate('/profile', {
+      state: { id: user.userID, email: user.email },
+    })
+  }
+
+  useEffect(() => {
+    searchUserHandle(searchValue)
+  }, [searchValue])
+
   const items: MenuProps['items'] = [
     {
       label: (
@@ -50,7 +69,7 @@ const Navbar = () => {
   ]
   return (
     <div className="md:h-[53px] h-[73px]   w-full md:justify-center justify-between lg:gap-20 md:gap-8 gap-4 items-center flex p-6 bg-white ">
-      <div className="flex items-center md:h-[53px] h-[73px] gap-4 justify-center ">
+      <div className="flex items-center md:h-[53px] h-[73px] gap-4 justify-center relative ">
         <Link to="/home">
           <BsLinkedin size={40} className="text-light-blue" />
         </Link>
@@ -67,9 +86,37 @@ const Navbar = () => {
           />
           <input
             type="text"
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
             placeholder="Arama yap"
             className="bg-blue-100 rounded-sm md:w-[280px] h-[34px] pl-8 md:focus:w-[384px] transition-all duration-700 "
           />
+          {searchValue.length > 0 ? (
+            <div className="bg-white w-[384px]  absolute left-0 flex flex-col gap-1 p-2  ">
+              {users.map((user) => {
+                return (
+                  <div
+                    className="mt-4 flex items-center gap-4 hover:bg-slate-300 cursor-pointer p-2 rounded-md "
+                    onClick={() => openUser(user)}
+                  >
+                    <img
+                      src={user.imageLink!}
+                      alt=""
+                      className="w-14 h-14 rounded-full object-cover"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-base">
+                        {user.firstName + ' ' + user.lastName}
+                      </h4>
+                      <h5 className="font-medium text-sm">{user.headline}</h5>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            ''
+          )}
         </div>
         <button
           className={searchBar ? 'hidden' : 'block '}

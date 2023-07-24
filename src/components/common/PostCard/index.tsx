@@ -102,7 +102,9 @@ const PostCard = ({
                 <p
                   className="text-sm font-semibold text-black cursor-pointer hover:underline underline-offset-2 hover:text-blue-600"
                   onClick={() =>
-                    navigate('/profile', { state: { id: id, email: email } })
+                    navigate('/profile', {
+                      state: { id: userID, email: email },
+                    })
                   }
                 >
                   {author}

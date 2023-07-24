@@ -35,8 +35,13 @@ const ProfileCard = () => {
     }
   }, [])
   useEffect(() => {
-    getFollowers(currentUser?.userID!, setFollowersCount)
-  }, [currentUser?.userID])
+    getFollowers(
+      Object.values(currentProfile).length === 0
+        ? currentUser?.userID!
+        : currentProfile.userID!,
+      setFollowersCount
+    )
+  }, [currentUser?.userID, currentProfile.userID])
 
   return (
     <div className="max-w-5xl mx-auto min-h-screen">
@@ -84,6 +89,8 @@ const ProfileCard = () => {
                 ? currentUser?.firstName && currentUser.lastName
                   ? currentUser.firstName + ' ' + currentUser.lastName
                   : currentUser?.fullName
+                : currentProfile?.firstName && currentProfile.lastName
+                ? currentProfile.firstName + ' ' + currentProfile.lastName
                 : currentProfile?.fullName}
             </h3>
             <p className="text-base ">

@@ -264,3 +264,19 @@ export const getFollowers = (
     console.log(error)
   }
 }
+
+export const getUsersBySearch = (firstName: string, setUsers) => {
+  const verifiedVal = firstName.charAt(0).toUpperCase() + firstName.slice(1)
+  try {
+    let usersQuery = query(
+      userRef,
+      where('firstName', '>=', verifiedVal),
+      where('firstName', '<=', verifiedVal + '\uf8ff')
+    )
+    onSnapshot(usersQuery, (snapshot) => {
+      setUsers(snapshot.docs.map((doc) => doc.data()))
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
