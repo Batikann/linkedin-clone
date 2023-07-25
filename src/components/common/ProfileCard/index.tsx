@@ -41,7 +41,7 @@ const ProfileCard = () => {
         : currentProfile.userID!,
       setFollowersCount
     )
-  }, [currentUser?.userID, currentProfile.userID])
+  }, [currentUser?.userID, currentProfile?.userID])
 
   return (
     <div className="max-w-5xl mx-auto min-h-screen">

@@ -30,6 +30,8 @@ const PostCard = ({
   setModal,
   setIsEdit,
   setPostID,
+  postImage,
+  setPostImage,
 }: post) => {
   const navigate = useNavigate()
   const [likesCount, setLikesCount] = useState<number>(0)
@@ -78,22 +80,29 @@ const PostCard = ({
     getAllUsers(setAllUsers)
   }, [id, userID])
 
-  const getEditData = (text: string) => {
+  const getEditData = (text: string, postImage: string) => {
     setModal(true)
     setText(text)
+    setPostImage(postImage)
     setIsEdit(true)
     setPostID(id)
   }
 
   return (
     <>
-      {isConnected || user.userID == postUserID ? (
-        <div className="bg-white p-4 border border-gray-300 rounded-lg md:w-[556px] w-full flex flex-col gap-4">
-          <div className="flex justify-between ">
-            <div className="flex gap-4 items-center">
+      {
+        <div
+          className={
+            isConnected || user?.userID == postUserID
+              ? 'bg-white  border border-gray-300 rounded-lg md:w-[556px] w-full flex flex-col gap-4 my-3'
+              : 'hidden'
+          }
+        >
+          <div className="flex justify-between p-4 ">
+            <div className="flex gap-4 items-center ">
               <img
                 src={allUsers
-                  .filter((user) => user.userID == postUserID)
+                  .filter((user) => user?.userID == postUserID)
                   .map((item) => item.imageLink)}
                 alt=""
                 className="w-10 h-10 rounded-full"
@@ -123,12 +132,27 @@ const PostCard = ({
               user={user}
               postUserID={postUserID}
               id={id}
+              postImage={postImage}
             />
           </div>
           <div>
-            <span className="text-sm">{text}</span>
+            {postImage && (
+              <div className="mb-4">
+                <img
+                  src={postImage}
+                  alt=""
+                  className="w-full object-cover h-[300px]"
+                />
+              </div>
+            )}
+            <div className="px-4">
+              <div
+                className="text-sm"
+                dangerouslySetInnerHTML={{ __html: text }}
+              ></div>
+            </div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between px-4">
             {likesCount > 0 ? (
               <p className="flex items-center gap-1">
                 <AiFillLike className="text-blue-500" size={15} />
@@ -144,7 +168,7 @@ const PostCard = ({
               {comments.length} yorum
             </p>
           </div>
-          <div className="border-t border-gray-300">
+          <div className="border-t border-gray-300 px-4 py-2">
             <ul className="flex md:justify-between justify-around pt-4">
               <li
                 className="flex gap-3 items-center cursor-pointer hover:bg-slate-200 p-3 rounded-md"
@@ -269,9 +293,7 @@ const PostCard = ({
             </div>
           )}
         </div>
-      ) : (
-        ''
-      )}
+      }
     </>
   )
 }

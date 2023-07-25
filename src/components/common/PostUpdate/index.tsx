@@ -8,8 +8,7 @@ import {
   postStatus,
   getPosts,
   getCurrentUser,
-  editPostText,
-  getConnections,
+  editPost,
 } from '../../../api/FirestoreAPI'
 import { User, post } from '../type'
 import PostCard from '../PostCard'
@@ -25,6 +24,7 @@ const PostStatus = () => {
   const [posts, setPosts] = useState<post[]>([])
   const [isEdit, setIsEdit] = useState(false)
   const [postID, setPostID] = useState('')
+  const [postImage, setPostImage] = useState<string>('')
 
   const addPost = async () => {
     let obj = {
@@ -37,7 +37,9 @@ const PostStatus = () => {
         ? currentUser?.firstName + ' ' + currentUser?.lastName
         : currentUser?.fullName,
       headline: currentUser?.headline ? currentUser.headline : '',
+      postImage: postImage ? postImage : '',
     }
+
     await postStatus(obj)
     await setModal(false)
     setText('')
@@ -58,12 +60,12 @@ const PostStatus = () => {
   }, [setPosts, posts])
 
   const updatePost = () => {
-    editPostText(postID, text)
+    editPost(postID, text, postImage)
     setModal(false)
   }
   return (
-    <div className="flex flex-col gap-6">
-      <div className="md:w-[555px] h-[116px] w-full bg-white p-3 flex justify-between flex-col rounded-lg border border-gray-300">
+    <div className="flex flex-col  min-h-screen gap-4">
+      <div className="md:w-[555px] h-[116px] w-full bg-white p-3 flex justify-between flex-col rounded-lg border border-gray-300 mb-3">
         <div className="flex  gap-4 items-center">
           <img
             src={currentUser?.imageLink!}
@@ -109,9 +111,11 @@ const PostStatus = () => {
           addPost={addPost}
           isEdit={isEdit}
           updatePost={updatePost}
+          setPostImage={setPostImage}
+          postImage={postImage}
         />
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 ">
         {posts.map((post) => {
           return (
             <span key={post.id}>
@@ -129,6 +133,8 @@ const PostStatus = () => {
                 setText={setText}
                 setIsEdit={setIsEdit}
                 setPostID={setPostID}
+                postImage={post.postImage}
+                setPostImage={setPostImage}
               />
             </span>
           )

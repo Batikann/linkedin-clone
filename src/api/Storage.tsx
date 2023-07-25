@@ -66,3 +66,30 @@ export const uploadBgImage = (
     }
   )
 }
+
+export const uploadPostImage = (
+  file: File,
+  setPostImage: React.Dispatch<React.SetStateAction<string>>,
+  setProgress: React.Dispatch<React.SetStateAction<number>>
+) => {
+  const postPicsRef = ref(storage, `postImages/${file.name}`)
+  const uploadTask = uploadBytesResumable(postPicsRef, file)
+  uploadTask.on(
+    'state_changed',
+    (snapshot) => {
+      const progress1 = Math.round(
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      )
+      setProgress(progress1)
+    },
+    (error) => {
+      console.log(error)
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((res) => {
+        setPostImage(res)
+        setProgress(0)
+      })
+    }
+  )
+}

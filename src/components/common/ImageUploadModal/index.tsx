@@ -45,7 +45,7 @@ const ImageUploadModalComponents = ({
       }
     >
       <div className="flex items-center justify-center flex-col gap-6">
-        <img src={currentUser?.imageLink} className="rounded-full" />
+        <img src={currentUser?.imageLink!} className="rounded-full" />
         <input
           type={'file'}
           onChange={getImage!}

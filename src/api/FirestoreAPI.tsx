@@ -61,10 +61,14 @@ export const postUserData = (object: any) => {
     })
 }
 
-export const editPostText = (postID: string, text: string) => {
+export const editPost = (
+  postID: string,
+  text: string,
+  postImage: string = ''
+) => {
   let updatePost = doc(postRef, postID)
   try {
-    updateDoc(updatePost, { text })
+    updateDoc(updatePost, { text, postImage })
     toast.success('Postunuz başarıyla güncellendi')
   } catch (error) {
     console.log(error)

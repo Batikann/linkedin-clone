@@ -12,6 +12,7 @@ export type post = {
   userID?: string
   postID?: string
   headline?: string
+  postImage?: string
 }
 
 export type User = {

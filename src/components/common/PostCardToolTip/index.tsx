@@ -3,7 +3,14 @@ import { Dropdown } from 'antd'
 import { BsThreeDots, BsPencil, BsTrash, BsBookmark } from 'react-icons/bs'
 import { deletePostDatabase } from '../../../api/FirestoreAPI'
 
-const PostCardToolTip = ({ getEditData, text, postUserID, user, id }) => {
+const PostCardToolTip = ({
+  getEditData,
+  text,
+  postUserID,
+  user,
+  id,
+  postImage,
+}) => {
   const deletePost = () => {
     deletePostDatabase(id)
   }
@@ -25,7 +32,7 @@ const PostCardToolTip = ({ getEditData, text, postUserID, user, id }) => {
               ? 'flex items-center gap-2 font-semibold'
               : 'hidden'
           }
-          onClick={() => getEditData(text)}
+          onClick={() => getEditData(text, postImage)}
         >
           <BsPencil size={18} />
           Gönderiyi Düzenle

@@ -15,11 +15,12 @@ import { logout } from '../../../api/AuthAPI'
 import { useAppDispatch } from '../../../hooks/reduxHooks'
 import { delUser } from '../../../redux/AuthSlice'
 import { User } from '../type'
-import { getUsersBySearch } from '../../../api/FirestoreAPI'
+import { getCurrentUser, getUsersBySearch } from '../../../api/FirestoreAPI'
 import { useEffect } from 'react'
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState<boolean>(true)
+  const [currentUser, setCurrentUser] = useState()
   const [searchValue, setSearchValue] = useState<string>('')
   const [users, setUsers] = useState<User[]>([])
   const dispatch = useAppDispatch()
@@ -32,6 +33,10 @@ const Navbar = () => {
     dispatch(delUser())
     res ? navigate('/') : ''
   }
+
+  useEffect(() => {
+    getCurrentUser(setCurrentUser)
+  }, [currentUser])
 
   const searchUserHandle = (searchValue) => {
     getUsersBySearch(searchValue, setUsers)
@@ -108,7 +113,7 @@ const Navbar = () => {
                       <h4 className="font-semibold text-base">
                         {user.firstName + ' ' + user.lastName}
                       </h4>
-                      <h5 className="font-medium text-sm">{user.headline}</h5>
+                      <h5 className=" text-xs">{user.headline}</h5>
                     </div>
                   </div>
                 )
@@ -161,7 +166,10 @@ const Navbar = () => {
           <li className="text-gray-500 flex flex-col justify-center items-center  hover:text-black  cursor-pointer">
             <Dropdown menu={{ items }} trigger={['click']}>
               <a onClick={(e) => e.preventDefault()}>
-                <BiUserCircle size={24} />
+                <img
+                  className="w-6 h-6 rounded-full"
+                  src={currentUser?.imageLink}
+                />
               </a>
             </Dropdown>
             <p className="text-xs hidden lg:block">Ben</p>
