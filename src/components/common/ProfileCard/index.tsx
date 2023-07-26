@@ -6,7 +6,7 @@ import {
   getSingleUser,
 } from '../../../api/FirestoreAPI'
 import { useState, useMemo, useEffect } from 'react'
-import { User, post } from '../type'
+import { Post, User } from '../type'
 import { BiPencil } from 'react-icons/bi'
 import { FiCamera } from 'react-icons/fi'
 import ProfileEdit from '../ProfileEdit'
@@ -16,9 +16,9 @@ import BgImageUploadModal from '../bgImageUploadModal'
 
 const ProfileCard = () => {
   let location = useLocation()
-  const [currentUser, setCurrentUser] = useState<User | undefined>()
-  const [currentProfile, setCurrentProfile] = useState<User>({})
-  const [posts, setPosts] = useState<post[]>([])
+  const [currentUser, setCurrentUser] = useState<User>({} as User)
+  const [currentProfile, setCurrentProfile] = useState<User>({} as User)
+  const [posts, setPosts] = useState<Post[]>([])
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [imageUploadModal, setImageUploadModal] = useState<boolean>(false)
   const [bgImageModal, setBgImageModal] = useState<boolean>(false)

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import universities from '../../mocks/universitesTurkey.json'
 import { editProfile } from '../../../api/FirestoreAPI'
-import { userDatabase } from '../../../api/type'
+import { User } from '../type'
 
 interface University {
   name: string
@@ -18,7 +18,7 @@ const ProfileEdit = ({ modalOpen, setModalOpen, currentUser }: any) => {
   const [countries, setCountries] = useState([])
   const [city, setCity] = useState([])
   const [university, setUniversity] = useState<{ value: string }[]>([])
-  const [test, setTest] = useState<userDatabase>()
+  const [test, setTest] = useState<User>({} as User)
   const handleSearchCountry = async (value: any) => {
     try {
       const response = await axios.get(

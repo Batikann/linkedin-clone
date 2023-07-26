@@ -9,7 +9,6 @@ import {
 import { toast } from 'react-toastify'
 
 import { auth, provider } from '../firebase/config'
-import { checkIfUserExists } from './FirestoreAPI'
 
 export const LoginAPI = async (email: string, password: string) => {
   let state = false

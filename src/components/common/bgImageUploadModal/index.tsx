@@ -1,5 +1,5 @@
 import { Button, Modal, Progress } from 'antd'
-import { File } from '../../../api/type'
+import { FileType } from '../../../api/type'
 import { useState } from 'react'
 import { uploadBgImage } from '../../../api/Storage'
 import { User } from '../type'
@@ -8,7 +8,7 @@ type UploadImageType = {
   setBgImageModal: React.Dispatch<React.SetStateAction<boolean>>
   bgImageModal: boolean
   currentUser: User
-  currentImage: File
+  currentImage?: FileType
 }
 
 const BgImageUploadModal = ({
@@ -16,14 +16,19 @@ const BgImageUploadModal = ({
   bgImageModal,
   currentUser,
 }: UploadImageType) => {
-  const [currentImage, setCurrentImage] = useState<File | null>({})
+  const [currentImage, setCurrentImage] = useState<FileType>({} as FileType)
   const [progress, setProgress] = useState<number>(0)
   const getImage = (event: any) => {
     setCurrentImage(event.target.files[0])
   }
 
   const uploadImageAPI = () => {
-    uploadBgImage(currentImage, currentUser?.id, setBgImageModal, setProgress)
+    uploadBgImage(
+      currentImage as any,
+      currentUser?.id as string,
+      setBgImageModal,
+      setProgress
+    )
   }
   return (
     <Modal

@@ -7,7 +7,6 @@ import {
   BsFillBellFill,
 } from 'react-icons/bs'
 import { IoMdHome, IoMdSearch, IoMdClose } from 'react-icons/io'
-import { BiUserCircle } from 'react-icons/bi'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Dropdown, MenuProps } from 'antd'
@@ -20,7 +19,7 @@ import { useEffect } from 'react'
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState<boolean>(true)
-  const [currentUser, setCurrentUser] = useState()
+  const [currentUser, setCurrentUser] = useState<User>({} as User)
   const [searchValue, setSearchValue] = useState<string>('')
   const [users, setUsers] = useState<User[]>([])
   const dispatch = useAppDispatch()
@@ -38,7 +37,7 @@ const Navbar = () => {
     getCurrentUser(setCurrentUser)
   }, [currentUser])
 
-  const searchUserHandle = (searchValue) => {
+  const searchUserHandle = (searchValue: string) => {
     getUsersBySearch(searchValue, setUsers)
   }
 
@@ -167,7 +166,7 @@ const Navbar = () => {
             <Dropdown menu={{ items }} trigger={['click']}>
               <a onClick={(e) => e.preventDefault()}>
                 <img
-                  className="w-6 h-6 rounded-full"
+                  className="w-6 h-6 rounded-full object-cover"
                   src={currentUser?.imageLink}
                 />
               </a>

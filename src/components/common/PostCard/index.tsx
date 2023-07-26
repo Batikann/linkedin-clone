@@ -1,4 +1,4 @@
-import { User, post } from '../type'
+import { Comment, Post, User } from '../type'
 import { useMemo, useState, useEffect } from 'react'
 import { AiFillLike, AiFillPicture } from 'react-icons/ai'
 import { BsShare, BsSendFill, BsEmojiSmile } from 'react-icons/bs'
@@ -16,76 +16,80 @@ import {
 import { getRelativeTime } from '../../../utils/dateUtils'
 import PostCardToolTip from '../PostCardToolTip'
 
+type PostCardType = {
+  post: Post
+  userID: string
+  user: User
+  setText: React.Dispatch<React.SetStateAction<string>>
+  setModal: React.Dispatch<React.SetStateAction<boolean>>
+  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
+  setPostID: React.Dispatch<React.SetStateAction<string>>
+  setPostImage: React.Dispatch<React.SetStateAction<string>>
+}
+
 const PostCard = ({
-  text,
-  author,
-  id,
-  email,
-  headline,
+  post,
   userID,
-  timeStamp,
   user,
-  postUserID,
   setText,
   setModal,
   setIsEdit,
   setPostID,
-  postImage,
   setPostImage,
-}: post) => {
+}: PostCardType) => {
   const navigate = useNavigate()
   const [likesCount, setLikesCount] = useState<number>(0)
   const [liked, setLiked] = useState<boolean>(false)
   const [showCommentBox, setShowCommentBox] = useState<boolean>(false)
   const [showComments, setShowComments] = useState<boolean>(false)
   const [comment, setComment] = useState<string>('')
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState<Comment[]>([])
   const [allUsers, setAllUsers] = useState<User[]>([])
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const handleLikeBtn = () => {
-    likeButton(id, userID!, liked)
+    likeButton(post.id, userID!, liked)
   }
   const timeStamp2 = getRelativeTime()
 
   useEffect(() => {
     setComments(
       comments.sort((a, b) => {
-        const dateA = new Date(a.timeStamp)
-        const dateB = new Date(b.timeStamp)
+        const dateA: number = new Date(a.timeStamp).getTime()
+        const dateB: number = new Date(b.timeStamp).getTime()
         return dateB - dateA
       })
     )
   }, [setComments, comments])
   useEffect(() => {
-    getConnections(user?.userID, postUserID, setIsConnected)
-  }, [user.userID, postUserID])
+    getConnections(user?.userID, post.userID!, setIsConnected)
+  }, [user.userID, post.userID])
 
-  const getComment = (e) => {
+  const getComment = (e: any) => {
     e.preventDefault()
     postComment(
-      id,
+      post.id,
       comment,
       timeStamp2,
       user.headline ? user.headline : '',
       user.firstName + ' ' + user.lastName,
-      user.email,
+      user.email!,
       user.imageLink
     )
     setComment('')
   }
 
   useMemo(() => {
-    getLikesByUser(userID!, id, setLiked, setLikesCount)
-    getComments(id, setComments)
+    getLikesByUser(userID!, post.id, setLiked, setLikesCount)
+    getComments(post.id, setComments)
     getAllUsers(setAllUsers)
-  }, [id, userID])
+  }, [post.id, userID])
 
   const getEditData = (text: string, postImage: string) => {
     setModal(true)
     setText(text)
     setPostImage(postImage)
     setIsEdit(true)
-    setPostID(id)
+    setPostID(post.id)
   }
 
   return (
@@ -93,7 +97,7 @@ const PostCard = ({
       {
         <div
           className={
-            isConnected || user?.userID == postUserID
+            isConnected || user?.userID == post.userID
               ? 'bg-white  border border-gray-300 rounded-lg md:w-[556px] w-full flex flex-col gap-4 my-3'
               : 'hidden'
           }
@@ -101,9 +105,11 @@ const PostCard = ({
           <div className="flex justify-between p-4 ">
             <div className="flex gap-4 items-center ">
               <img
-                src={allUsers
-                  .filter((user) => user?.userID == postUserID)
-                  .map((item) => item.imageLink)}
+                src={
+                  allUsers
+                    .filter((user) => user?.userID == post.userID)
+                    .map((item) => item.imageLink) as never
+                }
                 alt=""
                 className="w-10 h-10 rounded-full"
               />
@@ -112,15 +118,15 @@ const PostCard = ({
                   className="text-sm font-semibold text-black cursor-pointer hover:underline underline-offset-2 hover:text-blue-600"
                   onClick={() =>
                     navigate('/profile', {
-                      state: { id: userID, email: email },
+                      state: { id: userID, email: post.email },
                     })
                   }
                 >
-                  {author}
+                  {post.author}
                 </p>
-                <p className="text-xs text-gray-500">{headline}</p>
+                <p className="text-xs text-gray-500">{post.headline}</p>
                 <div className="flex gap-1 items-center">
-                  <p className="text-xs text-gray-500">{timeStamp}</p>
+                  <p className="text-xs text-gray-500">{post.timeStamp}</p>
                   <span>&#183;</span>
                   <GiEarthAmerica className="text-gray-600" />
                 </div>
@@ -128,18 +134,18 @@ const PostCard = ({
             </div>
             <PostCardToolTip
               getEditData={getEditData}
-              text={text}
+              text={post.text}
               user={user}
-              postUserID={postUserID}
-              id={id}
-              postImage={postImage}
+              postUserID={post.userID}
+              id={post.id}
+              postImage={post.postImage}
             />
           </div>
           <div>
-            {postImage && (
+            {post.postImage && (
               <div className="mb-4">
                 <img
-                  src={postImage}
+                  src={post.postImage}
                   alt=""
                   className="w-full object-cover h-[300px]"
                 />
@@ -148,7 +154,7 @@ const PostCard = ({
             <div className="px-4">
               <div
                 className="text-sm"
-                dangerouslySetInnerHTML={{ __html: text }}
+                dangerouslySetInnerHTML={{ __html: post.text }}
               ></div>
             </div>
           </div>
@@ -266,7 +272,7 @@ const PostCard = ({
                                 <p className="text-base font-semibold">
                                   {comment.author}
                                 </p>
-                                {email == comment.email ? (
+                                {post.email == comment.email ? (
                                   <p className="text-xs text-white bg-slate-500 font-semibold py-1 px-2 rounded-md">
                                     Yazar
                                   </p>

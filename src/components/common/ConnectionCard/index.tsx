@@ -1,7 +1,14 @@
 import { addConnection, getConnections } from '../../../api/FirestoreAPI'
 import { useEffect, useState } from 'react'
 import { HiUserAdd } from 'react-icons/hi'
-const ConnectionCard = ({ user, currentUser }) => {
+import { User } from '../type'
+
+type ConnectionCardType = {
+  user: User
+  currentUser: User
+}
+
+const ConnectionCard = ({ user, currentUser }: ConnectionCardType) => {
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const getCurrentUser = (userID: string) => {
     addConnection(currentUser.userID, userID)
@@ -20,7 +27,7 @@ const ConnectionCard = ({ user, currentUser }) => {
           <img src={user.bgImageLink} alt="" className="absolute top-0 h-20 " />
           <div className="relative z-10">
             <img
-              className="h-[104px] w-[104px] object-cover rounded-full "
+              className="h-[104px] w-[104px] object-cover rounded-full relative "
               src={user.imageLink}
               alt=""
             />

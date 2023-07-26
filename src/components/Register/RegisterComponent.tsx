@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { GoogleSignInAPI, RegisterAPI } from '../../api/AuthAPI'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { registerValidationSchema } from '../../schema/validationSchema'
-import { User } from '../type'
+
 import classNames from 'classnames'
 import { checkIfUserExists, postUserData } from '../../api/FirestoreAPI'
 import { toast } from 'react-toastify'
@@ -14,7 +14,18 @@ const RegisterComponent = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [step, setStep] = useState<number>(1)
-  const initialValues: User = {
+
+  type RegisterUserType = {
+    userID: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    bgImageLink: string
+    imageLink: string
+  }
+
+  const initialValues: RegisterUserType = {
     userID: uuidv4(),
     email: '',
     password: '',

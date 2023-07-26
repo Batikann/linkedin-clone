@@ -3,12 +3,12 @@ type time = {
   timeAgo: string
 }
 
-export type post = {
+export type Post = {
   id: string
   text: string
-  timeStamp: time
+  timeStamp: string
   email: string
-  author: string | null
+  author: string
   userID?: string
   postID?: string
   headline?: string
@@ -27,7 +27,18 @@ export type User = {
   education?: string
   headline?: string
   additionalName?: string
-  imageLink?: string | null
-  bgImageLink?: string | null
+  imageLink?: string
+  bgImageLink?: string
   getCurrentUser?: void
+}
+
+export type Comment = {
+  userID: string
+  author: string
+  comment: string
+  email: string
+  headline: string | null
+  postID: string
+  timeStamp: string
+  userImageLink: string
 }

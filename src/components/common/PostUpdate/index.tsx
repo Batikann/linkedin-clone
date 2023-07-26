@@ -10,7 +10,7 @@ import {
   getCurrentUser,
   editPost,
 } from '../../../api/FirestoreAPI'
-import { User, post } from '../type'
+import { Post, User } from '../type'
 import PostCard from '../PostCard'
 import { v4 as uuidv4 } from 'uuid'
 import { getRelativeTime } from '../../../utils/dateUtils'
@@ -19,9 +19,9 @@ const PostStatus = () => {
   const email = localStorage.getItem('userEmail')
 
   const [modal, setModal] = useState<boolean>(false)
-  const [currentUser, setCurrentUser] = useState<User | undefined>()
+  const [currentUser, setCurrentUser] = useState<User>({} as User)
   const [text, setText] = useState<string>('')
-  const [posts, setPosts] = useState<post[]>([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [isEdit, setIsEdit] = useState(false)
   const [postID, setPostID] = useState('')
   const [postImage, setPostImage] = useState<string>('')
@@ -52,8 +52,8 @@ const PostStatus = () => {
   useEffect(() => {
     setPosts(
       posts.sort((a, b) => {
-        const dateA = new Date(a.timeStamp)
-        const dateB = new Date(b.timeStamp)
+        const dateA = new Date(a.timeStamp).getTime()
+        const dateB = new Date(b.timeStamp).getTime()
         return dateB - dateA
       })
     )
@@ -116,24 +116,17 @@ const PostStatus = () => {
         />
       </div>
       <div className="grid grid-cols-1 ">
-        {posts.map((post) => {
+        {posts.map((post: Post) => {
           return (
             <span key={post.id}>
               <PostCard
-                id={post.id}
-                text={post.text}
-                timeStamp={post.timeStamp}
-                email={post.email}
-                author={post.author}
-                headline={post.headline}
-                userID={currentUser?.id}
+                post={post}
+                userID={currentUser?.id!}
                 user={currentUser}
-                postUserID={post.userID}
                 setModal={setModal}
                 setText={setText}
                 setIsEdit={setIsEdit}
                 setPostID={setPostID}
-                postImage={post.postImage}
                 setPostImage={setPostImage}
               />
             </span>

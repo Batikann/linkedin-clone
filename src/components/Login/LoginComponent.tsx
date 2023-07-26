@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { User } from '../type'
 import { GoogleSignInAPI, LoginAPI } from '../../api/AuthAPI'
 import { FcGoogle } from 'react-icons/fc'
 import { DiApple } from 'react-icons/di'
@@ -13,7 +12,12 @@ import { v4 as uuidv4 } from 'uuid'
 const LoginComponent = () => {
   const navigate = useNavigate()
 
-  const initialValues: User = {
+  type LoginUserType = {
+    email: string
+    password: string
+  }
+
+  const initialValues: LoginUserType = {
     email: '',
     password: '',
   }

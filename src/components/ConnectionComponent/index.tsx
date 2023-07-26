@@ -2,11 +2,10 @@ import { getAllUsers, getCurrentUser } from '../../api/FirestoreAPI'
 import { useState, useEffect, useMemo } from 'react'
 import { User } from '../common/type'
 import ConnectionCard from '../common/ConnectionCard'
-import { userDatabase } from '../../api/type'
 
 const ConnectionComponent = () => {
   const [users, setUsers] = useState<User[]>([])
-  const [currentUser, setCurrentUser] = useState<userDatabase>()
+  const [currentUser, setCurrentUser] = useState<User>({} as User)
   useEffect(() => {
     getAllUsers(setUsers)
   }, [])

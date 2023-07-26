@@ -2,13 +2,6 @@ import { storage } from '../firebase/config'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 import { editProfile } from './FirestoreAPI'
 
-type UploadImageType = {
-  file: File
-  id: string
-  setImageUploadModal: React.Dispatch<React.SetStateAction<boolean>>
-  setProgress?: React.Dispatch<React.SetStateAction<number>>
-}
-
 export const uploadImage = (
   file: File,
   id: string,

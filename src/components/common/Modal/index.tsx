@@ -74,7 +74,7 @@ const ModalComponent = ({
           type={'file'}
           hidden
           onChange={(e) =>
-            uploadPostImage(e.target.files[0], setPostImage, setProgress)
+            uploadPostImage(e.target.files![0], setPostImage, setProgress)
           }
         />
       </div>

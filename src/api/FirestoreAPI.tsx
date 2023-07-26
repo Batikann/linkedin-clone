@@ -12,8 +12,7 @@ import {
   deleteDoc,
 } from 'firebase/firestore'
 import { toast } from 'react-toastify'
-import { userDatabase } from './type'
-import { User } from '../components/common/type'
+import { Comment, User } from '../components/common/type'
 
 const postRef = collection(firestore, 'posts')
 export const userRef = collection(firestore, 'users')
@@ -86,7 +85,7 @@ export const deletePostDatabase = (id: string) => {
 }
 
 export const getCurrentUser = (
-  setCurrentUser: React.Dispatch<React.SetStateAction<userDatabase | undefined>>
+  setCurrentUser: React.Dispatch<React.SetStateAction<User>>
 ) => {
   onSnapshot(userRef, (response) => {
     setCurrentUser(
@@ -94,7 +93,7 @@ export const getCurrentUser = (
         .map((doc) => {
           return { ...doc.data(), userID: doc.data().userID, id: doc.id }
         })
-        .filter((item: userDatabase) => {
+        .filter((item: User) => {
           return item.email == localStorage.getItem('userEmail')
         })[0]
     )
@@ -178,13 +177,13 @@ export const getLikesByUser = (
 }
 
 export const postComment = (
-  postID,
-  comment,
-  timeStamp,
-  headline,
-  author,
-  email,
-  userImageLink = ''
+  postID: string,
+  comment: string,
+  timeStamp: string,
+  headline: string,
+  author: string,
+  email: string,
+  userImageLink: string | null = ''
 ) => {
   try {
     addDoc(commentsRef, {
@@ -201,10 +200,13 @@ export const postComment = (
   }
 }
 
-export const getComments = (postID: string, setComments) => {
+export const getComments = (
+  postID: string,
+  setComments: React.Dispatch<React.SetStateAction<Comment[]>>
+) => {
   let singlePostQuery = query(commentsRef, where('postID', '==', postID))
   onSnapshot(singlePostQuery, (snapshot) => {
-    const comments = snapshot.docs.map((doc) => {
+    const comments: any = snapshot.docs.map((doc) => {
       return {
         userID: doc.id,
         ...doc.data(),
@@ -269,7 +271,10 @@ export const getFollowers = (
   }
 }
 
-export const getUsersBySearch = (firstName: string, setUsers) => {
+export const getUsersBySearch = (
+  firstName: string,
+  setUsers: React.Dispatch<React.SetStateAction<User[]>>
+) => {
   const verifiedVal = firstName.charAt(0).toUpperCase() + firstName.slice(1)
   try {
     let usersQuery = query(
@@ -278,7 +283,7 @@ export const getUsersBySearch = (firstName: string, setUsers) => {
       where('firstName', '<=', verifiedVal + '\uf8ff')
     )
     onSnapshot(usersQuery, (snapshot) => {
-      setUsers(snapshot.docs.map((doc) => doc.data()))
+      setUsers(snapshot.docs.map((doc) => doc.data()) as User[])
     })
   } catch (error) {
     console.log(error)
